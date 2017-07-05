@@ -7,6 +7,12 @@ public class UniGL
     private Texture2D m_texture;
     private Color32[] m_buffer;
 
+    private int m_width;
+    private int m_height;
+
+    private Matrix4x4 m_projectionMat;
+    private Matrix4x4 m_modelViewMat;
+
 
     /// <summary>
     /// 构造函数
@@ -21,13 +27,26 @@ public class UniGL
         
         for(int i = 0; i < bufferSize; i++ )
             m_buffer[i] = Color.black;
+
+        m_width = m_texture.width;
+        m_height = m_texture.height;
     }
 
     /// <summary>
-    /// 设置投影参数
+    /// 设置透视投影参数
     /// </summary>
-    /// <param name="d"></param>
-    public void SetProjection( float d )
+    /// <param name="d"></param>    投影面距视点距离
+    /// <param name="size"></param> 投影面高度
+    public void Perspective( float d, float size = 1.0f )
+    {
+        //TODO 
+    }
+
+    /// <summary>
+    /// 设置正交投影参数 
+    /// </summary>
+    /// <param name="size"></param>
+    public void Ortho( float size )
     {
         //TODO 
     }
@@ -49,6 +68,6 @@ public class UniGL
     /// <param name="modelViewMat"></param>
     public void SetModelViewMatrix(Matrix4x4 modelViewMat)
     {
-        //TODO 
+        m_modelViewMat = modelViewMat;
     }
 }
