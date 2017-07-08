@@ -1,7 +1,10 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Assertions;
 
 
+/// <summary>
+/// 光栅化
+/// </summary>
 public class UniGL
 {
     private Texture2D m_texture;
@@ -11,8 +14,10 @@ public class UniGL
     private int m_height;
     private Color32 m_clearColor;
 
-    private Matrix4x4 m_projectionMat;
     private Matrix4x4 m_modelViewMat;
+
+    private IProjector m_projector;             // 提供投影矩阵
+    private IClippingSpace m_clippingSpace;     // 空间裁剪
 
 
     /// <summary>
@@ -40,7 +45,13 @@ public class UniGL
     /// <param name="size"></param> 投影面高度
     public void Perspective( float d, float size = 1.0f )
     {
-        //TODO 
+        Assert.IsTrue(d > float.Epsilon);
+        Assert.IsTrue(size > float.Epsilon);
+
+        Frustum frustum = new Frustum(d, size);
+
+        m_projector = frustum;
+        m_clippingSpace = frustum;
     }
 
     /// <summary>
@@ -49,7 +60,12 @@ public class UniGL
     /// <param name="size"></param>
     public void Ortho( float size )
     {
-        //TODO 
+        Assert.IsTrue(size > float.Epsilon);
+
+        ViewCube viewCube = new ViewCube(size);
+
+        m_projector = viewCube;
+        m_clippingSpace = viewCube;
     }
 
     /// <summary>
