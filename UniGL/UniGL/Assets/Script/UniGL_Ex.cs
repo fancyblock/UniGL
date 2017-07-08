@@ -47,6 +47,7 @@ public class UniGL_Ex : MonoBehaviour
             camera.orthographicSize = texture.height;             ///////[TEMP]
 
         m_uniGL = new UniGL(texture);
+        m_uniGL.ClearColor(Color.gray);
     }
 	
 	// Update is called once per frame

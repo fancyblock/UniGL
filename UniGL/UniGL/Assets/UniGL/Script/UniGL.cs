@@ -9,6 +9,7 @@ public class UniGL
 
     private int m_width;
     private int m_height;
+    private Color32 m_clearColor;
 
     private Matrix4x4 m_projectionMat;
     private Matrix4x4 m_modelViewMat;
@@ -49,6 +50,15 @@ public class UniGL
     public void Ortho( float size )
     {
         //TODO 
+    }
+
+    /// <summary>
+    /// 设置背景色
+    /// </summary>
+    /// <param name="color"></param>
+    public void ClearColor( Color32 color )
+    {
+        m_clearColor = color;
     }
 
     /// <summary>
