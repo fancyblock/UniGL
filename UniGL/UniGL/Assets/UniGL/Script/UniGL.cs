@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 
@@ -19,6 +21,8 @@ public class UniGL
     private IProjector m_projector;             // 提供投影矩阵
     private IClippingSpace m_clippingSpace;     // 空间裁剪
 
+    private LinkedList<DrawCall> m_drawCallList;
+
 
     /// <summary>
     /// 构造函数
@@ -36,6 +40,8 @@ public class UniGL
 
         m_width = m_texture.width;
         m_height = m_texture.height;
+
+        m_drawCallList = new LinkedList<DrawCall>();
     }
 
     /// <summary>
@@ -78,6 +84,41 @@ public class UniGL
     }
 
     /// <summary>
+    /// 绘制调用
+    /// </summary>
+    /// <param name="vertexBuff"></param>
+    /// <param name="indexBuff"></param>
+    /// <param name="trangleCount"></param>
+    public void Draw(List<Vertex> vertexBuff, List<int> indexBuff, int trangleCount)
+    {
+        DrawCall drawCall = new DrawCall();
+        //TODO 
+
+        m_drawCallList.AddLast(drawCall);
+    }
+
+    /// <summary>
+    /// 清除缓存
+    /// </summary>
+    /// <param name="colorBuffer"></param>
+    /// <param name="depthBuffer"></param>
+    /// <param name="stencilBuffer"></param>
+    public void Clear( bool colorBuffer, bool depthBuffer, bool stencilBuffer )
+    {
+        //TODO 
+    }
+
+    /// <summary>
+    /// 绑定贴图
+    /// </summary>
+    /// <param name="channel"></param>
+    /// <param name="tex"></param>
+    public void BindTexture(int channel, Texture2D tex)
+    {
+        //TODO 
+    }
+
+    /// <summary>
     /// 渲染当前的内容
     /// </summary>
     public void Present()
@@ -86,6 +127,8 @@ public class UniGL
         
         m_texture.SetPixels32(m_buffer);
         m_texture.Apply();
+
+        m_drawCallList.Clear();
     }
 
     /// <summary>

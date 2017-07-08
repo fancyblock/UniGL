@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 
 public class UniGL_Ex : MonoBehaviour
@@ -47,16 +48,36 @@ public class UniGL_Ex : MonoBehaviour
             camera.orthographicSize = texture.height;             ///////[TEMP]
 
         m_uniGL = new UniGL(texture);
-        m_uniGL.ClearColor(Color.gray);
+
+        init();
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+
+    private List<Vertex> m_vertBuff;
+    private List<int> m_indexBuf;
+    private Texture2D m_tex;
+
+    private void init()
+    {
+        m_uniGL.Ortho(10);
+        m_uniGL.ClearColor(Color.gray);
+        m_tex = Resources.Load<Texture2D>("logo");
+
+        m_uniGL.BindTexture(0, m_tex);
+    }
+
+    // Update is called once per frame
+    void Update ()
     {
         m_uniGL.SetModelViewMatrix(Matrix4x4.identity);
 
-        //TODO 
+        m_uniGL.Clear(true, true, true);
+
+        m_uniGL.Draw(m_vertBuff, m_indexBuf, 12);
 
         m_uniGL.Present();
 	}
+
+
+
 }
