@@ -21,6 +21,7 @@ public class UniGL
 
     private IProjector m_projector;             // 提供投影矩阵
     private IClippingSpace m_clippingSpace;     // 空间裁剪
+    private TextureSampler m_sampler;           // Texture Sampler
 
     private LinkedList<DrawCall> m_drawCallList;
 
@@ -47,6 +48,7 @@ public class UniGL
         m_height = m_texture.height;
 
         m_drawCallList = new LinkedList<DrawCall>();
+        m_sampler = new TextureSampler();
     }
 
     /// <summary>
@@ -118,7 +120,7 @@ public class UniGL
     /// <param name="tex"></param>
     public void BindTexture(int channel, Texture2D tex)
     {
-        //TODO 
+        m_sampler.SetTexture( channel, tex );
     }
 
     /// <summary>
