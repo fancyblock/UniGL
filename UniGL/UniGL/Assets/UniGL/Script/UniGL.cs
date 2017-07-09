@@ -11,6 +11,7 @@ public class UniGL
 {
     private Texture2D m_texture;
     private Color32[] m_buffer;
+    private float[] m_depthBuffer;
 
     private int m_width;
     private int m_height;
@@ -34,9 +35,13 @@ public class UniGL
 
         int bufferSize = m_texture.height * m_texture.width;
         m_buffer = new Color32[bufferSize];
+        m_depthBuffer = new float[bufferSize];
         
         for(int i = 0; i < bufferSize; i++ )
+        {
             m_buffer[i] = Color.black;
+            m_depthBuffer[i] = float.MaxValue;
+        }
 
         m_width = m_texture.width;
         m_height = m_texture.height;
@@ -91,9 +96,8 @@ public class UniGL
     /// <param name="trangleCount"></param>
     public void Draw(List<Vertex> vertexBuff, List<int> indexBuff, int trangleCount)
     {
-        DrawCall drawCall = new DrawCall();
-        //TODO 
-
+        DrawCall drawCall = new DrawCall(vertexBuff, indexBuff, trangleCount);
+        
         m_drawCallList.AddLast(drawCall);
     }
 
@@ -102,8 +106,7 @@ public class UniGL
     /// </summary>
     /// <param name="colorBuffer"></param>
     /// <param name="depthBuffer"></param>
-    /// <param name="stencilBuffer"></param>
-    public void Clear( bool colorBuffer, bool depthBuffer, bool stencilBuffer )
+    public void Clear( bool colorBuffer, bool depthBuffer )
     {
         //TODO 
     }

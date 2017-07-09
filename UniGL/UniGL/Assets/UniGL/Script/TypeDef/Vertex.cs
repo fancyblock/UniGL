@@ -11,8 +11,36 @@ public class Vertex
     public Vertex()
     {
         position = Vector2.zero;
+        position.w = 1;
         normal = Vector2.zero;
         color = Color.white;
         uv = Vector2.zero;
+    }
+
+    public Vertex( Vector3 _pos )
+    {
+        position = _pos;
+        position.w = 1;
+        normal = Vector2.zero;
+        color = Color.white;
+        uv = Vector2.zero;
+    }
+
+    public Vertex( Vector3 _pos, Vector2 _uv )
+    {
+        position = _pos;
+        position.w = 1;
+        normal = Vector2.zero;
+        color = Color.white;
+        uv = _uv;
+    }
+
+    public Vertex( Vector3 _pos, Vector2 _uv, Vector3 _normal )
+    {
+        position = _pos;
+        position.w = 1;
+        normal = _normal;
+        uv = _uv;
+        color = Color.white;
     }
 }

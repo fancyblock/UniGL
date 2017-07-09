@@ -64,6 +64,16 @@ public class UniGL_Ex : MonoBehaviour
         m_tex = Resources.Load<Texture2D>("logo");
 
         m_uniGL.BindTexture(0, m_tex);
+
+        m_vertBuff = new List<Vertex>() {
+            new Vertex(),
+            new Vertex(),
+            new Vertex(),
+            new Vertex(),
+        };
+        m_indexBuf = new List<int>() {
+            0, 1, 2, 0, 2, 3
+        };
     }
 
     // Update is called once per frame
@@ -71,13 +81,11 @@ public class UniGL_Ex : MonoBehaviour
     {
         m_uniGL.SetModelViewMatrix(Matrix4x4.identity);
 
-        m_uniGL.Clear(true, true, true);
+        m_uniGL.Clear(true, true);
 
-        m_uniGL.Draw(m_vertBuff, m_indexBuf, 12);
+        m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
 
         m_uniGL.Present();
 	}
-
-
 
 }

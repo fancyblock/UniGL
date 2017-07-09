@@ -5,5 +5,15 @@ using UnityEngine;
 
 public class DrawCall
 {
-    //TODO 
+    private List<Vertex> m_vertexBuff;
+    private List<int> m_indexbuff;
+    private int m_trangleCount;
+
+
+    public DrawCall(List<Vertex> vertexBuff, List<int> indexBuff, int trangleCount)
+    {
+        m_vertexBuff = vertexBuff;
+        m_indexbuff = indexBuff;
+        m_trangleCount = trangleCount;
+    }
 }
