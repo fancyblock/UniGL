@@ -66,10 +66,10 @@ public class UniGL_Ex : MonoBehaviour
         m_uniGL.BindTexture(0, m_tex);
 
         m_vertBuff = new List<Vertex>() {
-            new Vertex(),
-            new Vertex(),
-            new Vertex(),
-            new Vertex(),
+            new Vertex( new Vector3(-2, 2, 5), new Vector2(0, 0) ),
+            new Vertex( new Vector3(2, 2, 5), new Vector2(1, 0) ),
+            new Vertex( new Vector3(2, -2, 5), new Vector2(1, 1) ),
+            new Vertex( new Vector3(-2, -2, 5), new Vector2(0, 1) ),
         };
         m_indexBuf = new List<int>() {
             0, 1, 2, 0, 2, 3

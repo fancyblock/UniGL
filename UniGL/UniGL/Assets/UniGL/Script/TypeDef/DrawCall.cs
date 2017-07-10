@@ -15,5 +15,13 @@ public class DrawCall
         m_vertexBuff = vertexBuff;
         m_indexbuff = indexBuff;
         m_trangleCount = trangleCount;
+
+        //TODO 
     }
+
+    public void Clipping( IClippingSpace clippingSpace )
+    {
+        //TODO 
+    }
+
 }

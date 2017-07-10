@@ -110,7 +110,17 @@ public class UniGL
     /// <param name="depthBuffer"></param>
     public void Clear( bool colorBuffer, bool depthBuffer )
     {
-        //TODO 
+        if( colorBuffer )
+        {
+            for( int i = 0; i < m_buffer.Length; i++ )
+                m_buffer[i] = m_clearColor;
+        }
+        
+        if( depthBuffer )
+        {
+            for( int i = 0; i < m_depthBuffer.Length; i++ )
+                m_depthBuffer[i] = float.MaxValue;
+        }
     }
 
     /// <summary>
@@ -128,7 +138,10 @@ public class UniGL
     /// </summary>
     public void Present()
     {
-        //TODO 
+        foreach (DrawCall drawCall in m_drawCallList)
+        {
+            drawCall.Clipping( m_clippingSpace );
+        }
         
         m_texture.SetPixels32(m_buffer);
         m_texture.Apply();
