@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -15,7 +14,18 @@ public class DrawCall
         m_vertexBuff = vertexBuff;
         m_indexbuff = indexBuff;
         m_trangleCount = trangleCount;
+    }
 
+    public void Transform( Matrix4x4 matrix )
+    {
+        foreach( Vertex vertex in m_vertexBuff )
+        {
+            //TODO 
+        }
+    }
+
+    public void GenTrangleList()
+    {
         //TODO 
     }
 
@@ -24,4 +34,16 @@ public class DrawCall
         //TODO 
     }
 
+    public void Projection( IProjector projector )
+    {
+        //TODO 
+    }
+
+    public List<Trangle> TRANGLE_LIST
+    {
+        get
+        {
+            return null;
+        }
+    }
 }

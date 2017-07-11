@@ -8,6 +8,10 @@ public class Vertex
     public Color32 color;
     public Vector2 uv;
 
+    public int x;
+    public int y;
+
+
     public Vertex()
     {
         position = Vector2.zero;

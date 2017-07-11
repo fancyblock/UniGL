@@ -138,10 +138,19 @@ public class UniGL
     /// </summary>
     public void Present()
     {
+        List<List<Trangle>> trangleLists = new List<List<Trangle>>();
+
         foreach (DrawCall drawCall in m_drawCallList)
         {
-            drawCall.Clipping( m_clippingSpace );
+            drawCall.Transform(m_modelViewMat);
+            drawCall.GenTrangleList();
+            drawCall.Clipping(m_clippingSpace);
+            drawCall.Projection(m_projector);
+
+            trangleLists.Add(drawCall.TRANGLE_LIST);
         }
+
+        //TODO 
         
         m_texture.SetPixels32(m_buffer);
         m_texture.Apply();
