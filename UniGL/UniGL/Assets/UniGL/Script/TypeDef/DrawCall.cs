@@ -20,7 +20,8 @@ public class DrawCall
     {
         foreach( Vertex vertex in m_vertexBuff )
         {
-            //TODO 
+			matrix.MultiplyPoint3x4 (vertex.position);
+			matrix.MultiplyVector (vertex.normal);
         }
     }
 
@@ -36,7 +37,7 @@ public class DrawCall
 
     public void Projection( IProjector projector )
     {
-        //TODO 
+		//TODO 
     }
 
     public List<Trangle> TRANGLE_LIST

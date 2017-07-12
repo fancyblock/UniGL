@@ -12,8 +12,11 @@ public class Frustum : IClippingSpace, IProjector
     private Plane m_downClippingPlane;
 
     private Plane m_nearClippingPlane;
-    private float d;
-    private float size;
+
+    private float m_d;
+    private float m_size;
+	private int m_viewportWid;
+	private int m_viewportHei;
 
 
     /// <summary>
@@ -21,10 +24,12 @@ public class Frustum : IClippingSpace, IProjector
     /// </summary>
     /// <param name="d"></param>
     /// <param name="size"></param>
-    public Frustum(float d, float size)
+	public Frustum(float d, float size, int viewportWid, int viewportHei)
     {
-        this.d = d;
-        this.size = size;
+        m_d = d;
+        m_size = size;
+		m_viewportWid = viewportWid;
+		m_viewportHei = viewportHei;
     }
 
     public List<Vertex> Cliping(Vertex vertex)
@@ -36,5 +41,13 @@ public class Frustum : IClippingSpace, IProjector
     {
         throw new NotImplementedException();
     }
+
+	public void ProcessPosition( Vector4 pos, out int x, out int y )
+	{
+		x = 0;
+		y = 0;
+
+		//TODO 
+	}
 
 }

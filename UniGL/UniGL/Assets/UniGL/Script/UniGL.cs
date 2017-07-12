@@ -61,7 +61,7 @@ public class UniGL
         Assert.IsTrue(d > float.Epsilon);
         Assert.IsTrue(size > float.Epsilon);
 
-        Frustum frustum = new Frustum(d, size);
+		Frustum frustum = new Frustum(d, size, m_width, m_height);
 
         m_projector = frustum;
         m_clippingSpace = frustum;
@@ -75,7 +75,7 @@ public class UniGL
     {
         Assert.IsTrue(size > float.Epsilon);
 
-        ViewCube viewCube = new ViewCube(size);
+		ViewCube viewCube = new ViewCube(size, m_width, m_height);
 
         m_projector = viewCube;
         m_clippingSpace = viewCube;
