@@ -138,7 +138,7 @@ public class UniGL
     /// </summary>
     public void Present()
     {
-        List<List<Trangle>> trangleLists = new List<List<Trangle>>();
+        List<Trangle> trangleLists = new List<Trangle>();
 
         foreach (DrawCall drawCall in m_drawCallList)
         {
@@ -147,7 +147,7 @@ public class UniGL
             drawCall.Clipping(m_clippingSpace);
             drawCall.Projection(m_projector);
 
-            trangleLists.Add(drawCall.TRANGLE_LIST);
+            trangleLists.AddRange(drawCall.TRANGLE_LIST);
         }
 
         //TODO 

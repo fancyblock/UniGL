@@ -13,9 +13,11 @@ public class ViewCube : IClippingSpace, IProjector
 
     private Plane m_nearClippingPlane;
 
-    private float m_size;
+    private float m_sizeHei;
+	private float m_sizeWid;
 	private int m_viewportWid;
 	private int m_viewportHei;
+	private float m_ratio;
 
 
     /// <summary>
@@ -24,24 +26,25 @@ public class ViewCube : IClippingSpace, IProjector
     /// <param name="size"></param>
 	public ViewCube(float size, int viewportWid, int viewportHei)
     {
-        m_size = size;
 		m_viewportWid = viewportWid;
 		m_viewportHei = viewportHei;
+
+		m_sizeHei = size;
+		m_sizeWid = (float)m_viewportWid * m_sizeHei / (float)m_viewportHei;
+
+		m_ratio = (float)m_viewportHei / (float)m_sizeHei;
     }
 
-    public List<Vertex> Cliping(Vertex vertex)
+	public List<Trangle> Cliping(List<Trangle> trangleList)
     {
-        throw new NotImplementedException();
-    }
+        //TODO 
 
-    public Matrix4x4 GetProjectionMatrix()
-    {
-        throw new NotImplementedException();
+		return trangleList;
     }
 
 	public void ProcessPosition( Vector4 pos, out int x, out int y )
 	{
-		x = pos.x;
-		y = pos.y;
+		x = (int)( (pos.x - m_sizeWid / 2) * m_ratio );
+		y = (int)( (pos.y - m_sizeHei / 2) * m_ratio );
 	}
 }

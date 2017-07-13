@@ -32,14 +32,11 @@ public class Frustum : IClippingSpace, IProjector
 		m_viewportHei = viewportHei;
     }
 
-    public List<Vertex> Cliping(Vertex vertex)
+	public List<Trangle> Cliping(List<Trangle> trangleList)
     {
-        throw new NotImplementedException();
-    }
+        //TODO 
 
-    public Matrix4x4 GetProjectionMatrix()
-    {
-        throw new NotImplementedException();
+		return trangleList;
     }
 
 	public void ProcessPosition( Vector4 pos, out int x, out int y )
@@ -49,5 +46,4 @@ public class Frustum : IClippingSpace, IProjector
 
 		//TODO 
 	}
-
 }

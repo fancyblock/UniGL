@@ -3,5 +3,5 @@
 
 public interface IClippingSpace 
 {
-    List<Vertex> Cliping(Vertex vertex);    
+	List<Trangle> Cliping(List<Trangle> trangleList);
 }
