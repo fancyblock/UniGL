@@ -24,6 +24,7 @@ public class UniGL
     private TextureSampler m_sampler;           // Texture Sampler
 
     private LinkedList<DrawCall> m_drawCallList;
+    private Raster m_raster; 
 
 
     /// <summary>
@@ -46,6 +47,10 @@ public class UniGL
 
         m_width = m_texture.width;
         m_height = m_texture.height;
+
+        m_raster = new Raster(m_width, m_height);
+        m_raster.SetColorBuffer(m_buffer);
+        m_raster.SetDepthBuffer(m_depthBuffer);
 
         m_drawCallList = new LinkedList<DrawCall>();
         m_sampler = new TextureSampler();
@@ -144,13 +149,16 @@ public class UniGL
         {
             drawCall.Transform(m_modelViewMat);
             drawCall.GenTrangleList();
+            //TODO 背面剔除
             drawCall.Clipping(m_clippingSpace);
             drawCall.Projection(m_projector);
 
             trangleLists.AddRange(drawCall.TRANGLE_LIST);
         }
 
-        //TODO 
+        // 逐个光栅化三角形 
+        foreach (Trangle trangle in trangleLists)
+            m_raster.Rasterize(trangle);
         
         m_texture.SetPixels32(m_buffer);
         m_texture.Apply();

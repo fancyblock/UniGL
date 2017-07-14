@@ -26,6 +26,11 @@ public class DrawCall
         }
     }
 
+    public void BackFaceCulling()
+    {
+        //TODO 
+    }
+
     public void GenTrangleList()
     {
 		m_trangleList = new List<Trangle> (m_trangleCount);
