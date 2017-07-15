@@ -7,6 +7,8 @@ public class DrawCall
     private List<Vertex> m_vertexBuff;
     private List<int> m_indexbuff;
     private int m_trangleCount;
+
+	private List<Vertex> m_verteices;
 	private List<Trangle> m_trangleList;
 
 
@@ -15,15 +17,20 @@ public class DrawCall
         m_vertexBuff = vertexBuff;
         m_indexbuff = indexBuff;
         m_trangleCount = trangleCount;
+
+		m_verteices = new List<Vertex> (vertexBuff.Count);
     }
 
     public void Transform( Matrix4x4 matrix )
     {
-        foreach( Vertex vertex in m_vertexBuff )
-        {
-			matrix.MultiplyPoint3x4 (vertex.position);
-			matrix.MultiplyVector (vertex.normal);
-        }
+		for (int i = 0; i < m_vertexBuff.Count; i++) 
+		{
+			Vertex vertex = new Vertex (m_vertexBuff [i]);
+			vertex.position = matrix.MultiplyPoint3x4 (vertex.position);
+			vertex.normal = matrix.MultiplyVector (vertex.normal);
+
+			m_verteices.Add(vertex);
+		}
     }
 
     public void BackFaceCulling()
@@ -43,9 +50,7 @@ public class DrawCall
 			int indexBase = i * 3;
 
 			for (int j = 0; j < 3; j++) 
-			{
-				trangle.m_vertexs[j] = m_vertexBuff[m_indexbuff[indexBase + j]];
-			}
+				trangle.m_vertexs[j] = m_verteices[m_indexbuff[indexBase + j]];
 
 			m_trangleList.Add (trangle);
 		}

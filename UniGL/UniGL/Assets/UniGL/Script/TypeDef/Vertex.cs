@@ -21,6 +21,14 @@ public class Vertex
         uv = Vector2.zero;
     }
 
+	public Vertex( Vertex vertex )
+	{
+		position = vertex.position;
+		normal = vertex.normal;
+		color = vertex.color;
+		uv = vertex.uv;
+	}
+
     public Vertex( Vector3 _pos )
     {
         position = _pos;

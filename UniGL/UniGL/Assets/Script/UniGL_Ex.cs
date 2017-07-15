@@ -67,10 +67,10 @@ public class UniGL_Ex : MonoBehaviour
 
         m_vertBuff = new List<Vertex>() 
 		{
-            new Vertex( new Vector3(-2, 2, 5), new Vector2(0, 0) ),
-            new Vertex( new Vector3(2, 2, 5), new Vector2(1, 0) ),
-            new Vertex( new Vector3(2, -2, 5), new Vector2(1, 1) ),
-            new Vertex( new Vector3(-2, -2, 5), new Vector2(0, 1) ),
+            new Vertex( new Vector3(-2, 2, 0), new Vector2(0, 0) ),
+            new Vertex( new Vector3(2, 2, 0), new Vector2(1, 0) ),
+            new Vertex( new Vector3(2, -2, 0), new Vector2(1, 1) ),
+            new Vertex( new Vector3(-2, -2, 0), new Vector2(0, 1) ),
         };
         m_indexBuf = new List<int>() 
 		{
@@ -81,7 +81,11 @@ public class UniGL_Ex : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-        m_uniGL.SetModelViewMatrix(Matrix4x4.identity);
+		Matrix4x4 mat = Matrix4x4.identity;
+		mat *= Matrix4x4.Translate (new Vector3 (0, 0, 5));
+		mat *= Matrix4x4.Rotate();
+
+		m_uniGL.SetModelViewMatrix(mat);
 
         m_uniGL.Clear(true, true);
 
