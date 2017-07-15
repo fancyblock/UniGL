@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class UniGL_Ex : MonoBehaviour
 {
+
+
     public int m_width;
     public int m_height;
 
@@ -60,17 +62,17 @@ public class UniGL_Ex : MonoBehaviour
     private void init()
     {
         m_uniGL.Ortho(10);
-        m_uniGL.ClearColor(Color.gray);
+        m_uniGL.ClearColor(Color.black);
         m_tex = Resources.Load<Texture2D>("logo");
 
         m_uniGL.BindTexture(0, m_tex);
 
         m_vertBuff = new List<Vertex>() 
 		{
-            new Vertex( new Vector3(-2, 2, 0), new Vector2(0, 0) ),
-            new Vertex( new Vector3(2, 2, 0), new Vector2(1, 0) ),
-            new Vertex( new Vector3(2, -2, 0), new Vector2(1, 1) ),
-            new Vertex( new Vector3(-2, -2, 0), new Vector2(0, 1) ),
+            new Vertex( new Vector3(-2, 2, -2), new Vector2(0, 0) ),
+            new Vertex( new Vector3(2, 2, -2), new Vector2(1, 0) ),
+            new Vertex( new Vector3(2, -2, -2), new Vector2(1, 1) ),
+            new Vertex( new Vector3(-2, -2, -2), new Vector2(0, 1) ),
         };
         m_indexBuf = new List<int>() 
 		{
@@ -82,14 +84,28 @@ public class UniGL_Ex : MonoBehaviour
     void Update ()
     {
 		Matrix4x4 mat = Matrix4x4.identity;
-		mat *= Matrix4x4.Translate (new Vector3 (0, 0, 5));
-		mat *= Matrix4x4.Rotate();
+		mat *= Matrix4x4.Translate (new Vector3 (0, 0, 6));
+        mat *= Matrix4x4.Rotate(Quaternion.Euler(Time.realtimeSinceStartup*3,Time.realtimeSinceStartup*10,0));
 
 		m_uniGL.SetModelViewMatrix(mat);
 
         m_uniGL.Clear(true, true);
 
         m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
+
+        mat *= Matrix4x4.Rotate(Quaternion.Euler(0, 90, 0));
+        m_uniGL.SetModelViewMatrix(mat);
+        m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
+
+        mat *= Matrix4x4.Rotate(Quaternion.Euler(0, 90, 0));
+        m_uniGL.SetModelViewMatrix(mat);
+        m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
+
+        mat *= Matrix4x4.Rotate(Quaternion.Euler(0, 90, 0));
+        m_uniGL.SetModelViewMatrix(mat);
+        m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
+
+        //TODO 
 
         m_uniGL.Present();
 	}

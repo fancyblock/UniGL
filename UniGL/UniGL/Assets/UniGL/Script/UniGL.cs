@@ -48,12 +48,13 @@ public class UniGL
         m_width = m_texture.width;
         m_height = m_texture.height;
 
+        m_drawCallList = new LinkedList<DrawCall>();
+        m_sampler = new TextureSampler();
+
         m_raster = new Raster(m_width, m_height);
         m_raster.SetColorBuffer(m_buffer);
         m_raster.SetDepthBuffer(m_depthBuffer);
-
-        m_drawCallList = new LinkedList<DrawCall>();
-        m_sampler = new TextureSampler();
+        m_raster.SetTextureSampler(m_sampler);
     }
 
     /// <summary>
@@ -104,7 +105,8 @@ public class UniGL
     public void Draw(List<Vertex> vertexBuff, List<int> indexBuff, int trangleCount)
     {
         DrawCall drawCall = new DrawCall(vertexBuff, indexBuff, trangleCount);
-        
+        drawCall.Transform(m_modelViewMat);
+
         m_drawCallList.AddLast(drawCall);
     }
 
@@ -147,7 +149,6 @@ public class UniGL
 
         foreach (DrawCall drawCall in m_drawCallList)
         {
-            drawCall.Transform(m_modelViewMat);
             drawCall.GenTrangleList();
             //TODO 背面剔除
             drawCall.Clipping(m_clippingSpace);
