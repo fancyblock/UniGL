@@ -1,6 +1,15 @@
 ﻿using UnityEngine;
 
 
+public enum RasterType
+{
+	Point,
+	Line,
+	SolidColor,
+	Texture,
+}
+
+
 /// <summary>
 /// 用于三角形光栅化 
 /// </summary>
@@ -22,7 +31,15 @@ public class Raster
     {
         m_width = width;
         m_height = height;
+
+		RASTER_TYPE = RasterType.Point;
     }
+
+	/// <summary>
+	/// Gets or sets the RASTE r TYP.
+	/// </summary>
+	/// <value>The RASTE r TYP.</value>
+	public RasterType RASTER_TYPE{ get; set; }
 
     /// <summary>
     /// 设置颜色缓冲区
@@ -48,7 +65,52 @@ public class Raster
     /// <param name="trangle"></param>
     public void Rasterize( Trangle trangle )
     {
-        //TODO 
+		switch (RASTER_TYPE) 
+		{
+		case RasterType.Line:
+			line_rasterize (trangle);
+			break;
+		case RasterType.Point:
+			point_rasterize (trangle);
+			break;
+		case RasterType.SolidColor:
+			solid_rasterize (trangle);
+			break;
+		case RasterType.Texture:
+			texture_rasterize (trangle);
+			break;
+		default:
+			break;
+		}
     }
 
+
+	private void point_rasterize( Trangle trangle )
+	{
+		foreach (Vertex vertex in trangle.m_vertexs) 
+		{
+			if (vertex.x >= 0 && vertex.x < m_width && vertex.y >= 0 && vertex.y < m_height) 
+			{
+				int index = vertex.y * m_width + vertex.x;
+
+				if (vertex.position.z < m_depthBuffer [index]) 
+				{
+					m_colorBuffer [index] = vertex.color;
+					m_depthBuffer [index] = vertex.position.z;
+				}
+			}
+		}
+	}
+
+	private void line_rasterize( Trangle trangle )
+	{
+	}
+
+	private void solid_rasterize( Trangle trangle )
+	{
+	}
+
+	private void texture_rasterize( Trangle trangle )
+	{
+	}
 }
