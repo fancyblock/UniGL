@@ -13,9 +13,14 @@ public class Frustum : IClippingSpace, IProjector
     private Plane m_nearClippingPlane;
 
     private float m_d;
-    private float m_size;
+
 	private int m_viewportWid;
 	private int m_viewportHei;
+
+    private float m_sizeHei;
+    private float m_sizeWid;
+
+    private float m_ratio;
 
 
     /// <summary>
@@ -26,9 +31,14 @@ public class Frustum : IClippingSpace, IProjector
 	public Frustum(float d, float size, int viewportWid, int viewportHei)
     {
         m_d = d;
-        m_size = size;
-		m_viewportWid = viewportWid;
-		m_viewportHei = viewportHei;
+
+        m_viewportWid = viewportWid;
+        m_viewportHei = viewportHei;
+
+        m_sizeHei = size;
+        m_sizeWid = (float)m_viewportWid * m_sizeHei / (float)m_viewportHei;
+
+        m_ratio = (float)m_viewportHei / m_sizeHei;
     }
 
 	public List<Trangle> Cliping(List<Trangle> trangleList)
@@ -40,10 +50,8 @@ public class Frustum : IClippingSpace, IProjector
 
 	public void ProcessPosition( Vector4 pos, out int x, out int y )
 	{
-		x = 0;
-		y = 0;
-
-		//TODO 
+		x = (int)((pos.x * m_d / pos.z + m_sizeWid / 2) * m_ratio);
+		y = (int)((pos.y * m_d / pos.z + m_sizeHei / 2) * m_ratio);
 	}
 
     public bool IsPerspective()

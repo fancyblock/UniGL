@@ -43,8 +43,8 @@ public class ViewCube : IClippingSpace, IProjector
 
 	public void ProcessPosition( Vector4 pos, out int x, out int y )
 	{
-		x = Mathf.RoundToInt( (pos.x + m_sizeWid / 2) * m_ratio );
-		y = Mathf.RoundToInt( (pos.y + m_sizeHei / 2) * m_ratio );
+		x = (int)( (pos.x + m_sizeWid / 2) * m_ratio );
+		y = (int)( (pos.y + m_sizeHei / 2) * m_ratio );
 	}
 
     public bool IsPerspective()

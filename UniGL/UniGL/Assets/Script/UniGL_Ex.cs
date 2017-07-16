@@ -42,7 +42,8 @@ public class UniGL_Ex : MonoBehaviour
 
     private void init()
     {
-        m_uniGL.Ortho(10);
+        //m_uniGL.Ortho(10);
+        m_uniGL.Perspective(3, 5);
         m_uniGL.ClearColor(Color.black);
         m_tex = Resources.Load<Texture2D>("logo");
 
@@ -67,7 +68,7 @@ public class UniGL_Ex : MonoBehaviour
     void Update ()
     {
 		Matrix4x4 mat = Matrix4x4.identity;
-		mat *= Matrix4x4.Translate (new Vector3 (0, 0, 6));
+		mat *= Matrix4x4.Translate (new Vector3 (0, 0, 8));
         mat *= Matrix4x4.Rotate(Quaternion.Euler(m_angle/3,m_angle,0));
         m_angle += 0.3f;
 
@@ -75,27 +76,30 @@ public class UniGL_Ex : MonoBehaviour
 
         m_uniGL.Clear(true, true);
 
-        m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
+        // 绘制一个立方体
+        {
+            m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
 
-        mat *= Matrix4x4.Rotate(Quaternion.Euler(0, 90, 0));
-        m_uniGL.SetModelViewMatrix(mat);
-        m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
+            mat *= Matrix4x4.Rotate(Quaternion.Euler(0, 90, 0));
+            m_uniGL.SetModelViewMatrix(mat);
+            m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
 
-        mat *= Matrix4x4.Rotate(Quaternion.Euler(0, 90, 0));
-        m_uniGL.SetModelViewMatrix(mat);
-        m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
+            mat *= Matrix4x4.Rotate(Quaternion.Euler(0, 90, 0));
+            m_uniGL.SetModelViewMatrix(mat);
+            m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
 
-        mat *= Matrix4x4.Rotate(Quaternion.Euler(0, 90, 0));
-        m_uniGL.SetModelViewMatrix(mat);
-        m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
+            mat *= Matrix4x4.Rotate(Quaternion.Euler(0, 90, 0));
+            m_uniGL.SetModelViewMatrix(mat);
+            m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
 
-        mat *= Matrix4x4.Rotate(Quaternion.Euler(90, 0, 0));
-        m_uniGL.SetModelViewMatrix(mat);
-        m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
+            mat *= Matrix4x4.Rotate(Quaternion.Euler(90, 0, 0));
+            m_uniGL.SetModelViewMatrix(mat);
+            m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
 
-        mat *= Matrix4x4.Rotate(Quaternion.Euler(180, 0, 0));
-        m_uniGL.SetModelViewMatrix(mat);
-        m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
+            mat *= Matrix4x4.Rotate(Quaternion.Euler(180, 0, 0));
+            m_uniGL.SetModelViewMatrix(mat);
+            m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
+        }
 
         m_uniGL.Present();
 	}
