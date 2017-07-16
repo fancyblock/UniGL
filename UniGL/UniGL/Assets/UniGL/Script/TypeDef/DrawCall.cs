@@ -60,7 +60,13 @@ public class DrawCall
 
         if( isPerspective )
         {
-            //TODO 
+            foreach (Trangle trangle in m_trangleList)
+            {
+                Vector3 seeVec = trangle.m_vertexs[0].position.normalized;
+                float d = Vector3.Dot(seeVec, trangle.NORMAL);
+                if (!(d <= 0 || d >= 1.0f))
+                    removeList.Add(trangle);
+            }
         }
         else
         {
