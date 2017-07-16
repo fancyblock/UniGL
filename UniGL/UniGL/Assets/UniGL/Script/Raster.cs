@@ -111,10 +111,12 @@ public class Raster
 
 	private void solid_rasterize( Trangle trangle )
 	{
+        //TODO 
 	}
 
 	private void texture_rasterize( Trangle trangle )
 	{
+        //TODO  
 	}
 
     private void drawPixel( int x, int y, Color32 color, float z )

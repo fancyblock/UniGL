@@ -23,6 +23,7 @@ public class UniGL_Ex : MonoBehaviour
         m_rawImage.SetNativeSize();
 
         m_scaler.referenceResolution = new Vector2(m_width, m_height);
+        m_scaler.matchWidthOrHeight = m_width > m_height ? 0.0f : 1.0f;
 
         // adjust size scale 
         if (Screen.width > Screen.height)
@@ -38,16 +39,14 @@ public class UniGL_Ex : MonoBehaviour
 
     private List<Vertex> m_vertBuff;
     private List<int> m_indexBuf;
-    private Texture2D m_tex;
 
     private void init()
     {
         //m_uniGL.Ortho(10);
         m_uniGL.Perspective(3, 5);
-        m_uniGL.ClearColor(Color.black);
-        m_tex = Resources.Load<Texture2D>("logo");
+        m_uniGL.ClearColor(Color.gray);
 
-        m_uniGL.BindTexture(0, m_tex);
+        m_uniGL.BindTexture(0, Resources.Load<Texture2D>("logo"));
 
         m_vertBuff = new List<Vertex>() 
 		{
@@ -67,14 +66,14 @@ public class UniGL_Ex : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-		Matrix4x4 mat = Matrix4x4.identity;
+        m_uniGL.Clear(true, true);
+
+        Matrix4x4 mat = Matrix4x4.identity;
 		mat *= Matrix4x4.Translate (new Vector3 (0, 0, 8));
         mat *= Matrix4x4.Rotate(Quaternion.Euler(m_angle/3,m_angle,0));
         m_angle += 0.3f;
 
 		m_uniGL.SetModelViewMatrix(mat);
-
-        m_uniGL.Clear(true, true);
 
         // 绘制一个立方体
         {
