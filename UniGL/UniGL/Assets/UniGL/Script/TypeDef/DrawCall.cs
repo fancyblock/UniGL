@@ -33,30 +33,46 @@ public class DrawCall
 		}
     }
 
+    public void GenTrangleList()
+    {
+        m_trangleList = new List<Trangle>(m_trangleCount);
+
+        for (int i = 0; i < m_trangleCount; i++)
+        {
+            Trangle trangle = new Trangle();
+            trangle.m_vertexs = new Vertex[3];
+
+            int indexBase = i * 3;
+
+            for (int j = 0; j < 3; j++)
+                trangle.m_vertexs[j] = m_verteices[m_indexbuff[indexBase + j]];
+
+            m_trangleList.Add(trangle);
+        }
+    }
+
     /// <summary>
     /// 背面剔除
     /// </summary>
     public void BackFaceCulling( bool isPerspective )
     {
-        //TODO 
-    }
+        List<Trangle> removeList = new List<Trangle>();
 
-    public void GenTrangleList()
-    {
-		m_trangleList = new List<Trangle> (m_trangleCount);
+        if( isPerspective )
+        {
+            //TODO 
+        }
+        else
+        {
+            foreach( Trangle trangle in m_trangleList )
+            {
+                if (trangle.NORMAL.z > 0)
+                    removeList.Add(trangle);
+            }
+        }
 
-		for (int i = 0; i < m_trangleCount; i++) 
-		{
-			Trangle trangle = new Trangle ();
-			trangle.m_vertexs = new Vertex[3];
-
-			int indexBase = i * 3;
-
-			for (int j = 0; j < 3; j++) 
-				trangle.m_vertexs[j] = m_verteices[m_indexbuff[indexBase + j]];
-
-			m_trangleList.Add (trangle);
-		}
+        foreach (Trangle trangle in removeList)
+            m_trangleList.Remove(trangle);
     }
 
     public void Clipping( IClippingSpace clippingSpace )
