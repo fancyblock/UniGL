@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 
 public class UniGL_Ex : MonoBehaviour
 {
-
+    public Camera m_camera;
+    public RawImage m_rawImage;
+    public CanvasScaler m_scaler;
 
     public int m_width;
     public int m_height;
@@ -14,40 +17,18 @@ public class UniGL_Ex : MonoBehaviour
 	// Use this for initialization
 	void Awake ()
     {
-        // create camera 
-        GameObject go = new GameObject();
-        go.name = "Renderer";
-
-        Camera camera = go.AddComponent<Camera>();
-
-        camera.orthographic = true;
-        camera.orthographicSize = 1.0f;
-        camera.clearFlags = CameraClearFlags.SolidColor;
-        camera.backgroundColor = Color.black;
-
-        camera.nearClipPlane = -10;
-        camera.farClipPlane = 100;
-
-        camera.useOcclusionCulling = false;
-        camera.allowHDR = false;
-        camera.allowMSAA = false;
-
-        // create sprite render
-        SpriteRenderer spriteRender = go.AddComponent<SpriteRenderer>();
-
         // create texture 
         Texture2D texture = new Texture2D( m_width, m_height, TextureFormat.RGBA32, false, false);
+        m_rawImage.texture = texture;
+        m_rawImage.SetNativeSize();
 
-        // create texture
-        Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f,0.5f), 1);
-
-        spriteRender.sprite = sprite;
+        m_scaler.referenceResolution = new Vector2(m_width, m_height);
 
         // adjust size scale 
         if (Screen.width > Screen.height)
-            camera.orthographicSize = texture.height / 2;
+            m_camera.orthographicSize = texture.height / 2;
         else
-            camera.orthographicSize = texture.height;             ///////[TEMP]
+            m_camera.orthographicSize = texture.height;             ///////[TEMP]
 
         m_uniGL = new UniGL(texture);
 
