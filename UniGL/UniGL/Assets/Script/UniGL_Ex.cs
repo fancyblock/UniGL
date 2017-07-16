@@ -80,12 +80,15 @@ public class UniGL_Ex : MonoBehaviour
         };
     }
 
+    private float m_angle = 0;
+
     // Update is called once per frame
     void Update ()
     {
 		Matrix4x4 mat = Matrix4x4.identity;
 		mat *= Matrix4x4.Translate (new Vector3 (0, 0, 6));
-        mat *= Matrix4x4.Rotate(Quaternion.Euler(Time.realtimeSinceStartup*3,Time.realtimeSinceStartup*10,0));
+        mat *= Matrix4x4.Rotate(Quaternion.Euler(m_angle/3,m_angle,0));
+        m_angle += 0.3f;
 
 		m_uniGL.SetModelViewMatrix(mat);
 
@@ -105,7 +108,13 @@ public class UniGL_Ex : MonoBehaviour
         m_uniGL.SetModelViewMatrix(mat);
         m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
 
-        //TODO 
+        mat *= Matrix4x4.Rotate(Quaternion.Euler(90, 0, 0));
+        m_uniGL.SetModelViewMatrix(mat);
+        m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
+
+        mat *= Matrix4x4.Rotate(Quaternion.Euler(180, 0, 0));
+        m_uniGL.SetModelViewMatrix(mat);
+        m_uniGL.Draw(m_vertBuff, m_indexBuf, 2);
 
         m_uniGL.Present();
 	}
