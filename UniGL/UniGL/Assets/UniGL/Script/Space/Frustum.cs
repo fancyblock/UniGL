@@ -45,4 +45,9 @@ public class Frustum : IClippingSpace, IProjector
 
 		//TODO 
 	}
+
+    public bool IsPerspective()
+    {
+        return true;
+    }
 }

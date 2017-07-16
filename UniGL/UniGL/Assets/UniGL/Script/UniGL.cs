@@ -150,7 +150,7 @@ public class UniGL
         foreach (DrawCall drawCall in m_drawCallList)
         {
             drawCall.GenTrangleList();
-            //TODO 背面剔除
+            drawCall.BackFaceCulling(m_projector.IsPerspective());
             drawCall.Clipping(m_clippingSpace);
             drawCall.Projection(m_projector);
 

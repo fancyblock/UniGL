@@ -46,4 +46,9 @@ public class ViewCube : IClippingSpace, IProjector
 		x = Mathf.RoundToInt( (pos.x + m_sizeWid / 2) * m_ratio );
 		y = Mathf.RoundToInt( (pos.y + m_sizeHei / 2) * m_ratio );
 	}
+
+    public bool IsPerspective()
+    {
+        return false;
+    }
 }

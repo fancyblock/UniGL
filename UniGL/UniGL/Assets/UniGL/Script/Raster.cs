@@ -98,10 +98,8 @@ public class Raster
 
 	private void point_rasterize( Trangle trangle )
 	{
-		foreach (Vertex vertex in trangle.m_vertexs) 
-		{
-
-		}
+        foreach (Vertex vertex in trangle.m_vertexs)
+            drawPixel(vertex.x, vertex.y, vertex.color, vertex.position.z);
 	}
 
 	private void line_rasterize( Trangle trangle )
@@ -176,7 +174,7 @@ public class Raster
                 float accu = pt2.y;
 
                 for (int i = pt2.x; i <= pt1.x; i++, accu += k)
-                    drawPixel(i, (int)accu, Color.white, -1);
+                    drawPixel(i, (int)(accu), Color.white, -1);
             }
             else
             {
@@ -184,7 +182,7 @@ public class Raster
                 float accu = pt1.y;
 
                 for (int i = pt1.x; i <= pt2.x; i++, accu += k)
-                    drawPixel(i, (int)accu, Color.white, -1);
+                    drawPixel(i, (int)(accu), Color.white, -1);
             }
         }
         else
@@ -195,7 +193,7 @@ public class Raster
                 float accu = pt2.x;
 
                 for (int i = pt2.y; i <= pt1.y; i++, accu += k)
-                    drawPixel((int)accu, i, Color.white, -1);
+                    drawPixel((int)(accu), i, Color.white, -1);
             }
             else
             {
@@ -203,7 +201,7 @@ public class Raster
                 float accu = pt1.x;
 
                 for (int i = pt1.y; i <= pt2.y; i++, accu += k)
-                    drawPixel((int)accu, i, Color.white, -1);
+                    drawPixel((int)(accu), i, Color.white, -1);
             }
         }
     }

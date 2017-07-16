@@ -33,7 +33,10 @@ public class DrawCall
 		}
     }
 
-    public void BackFaceCulling()
+    /// <summary>
+    /// 背面剔除
+    /// </summary>
+    public void BackFaceCulling( bool isPerspective )
     {
         //TODO 
     }
