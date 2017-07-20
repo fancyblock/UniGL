@@ -2,6 +2,9 @@
 using UnityEngine;
 
 
+/// <summary>
+/// 用于纹理采样 
+/// </summary>
 public class TextureSampler 
 {
 	private Dictionary<int,Texture2D> m_texDic = new Dictionary<int, Texture2D>();
@@ -14,4 +17,7 @@ public class TextureSampler
 		else
 			m_texDic.Add(channel, tex);
 	}
+
+    //TODO 
+
 }

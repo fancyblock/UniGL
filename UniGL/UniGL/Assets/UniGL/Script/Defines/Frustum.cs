@@ -2,6 +2,9 @@
 using UnityEngine;
 
 
+/// <summary>
+/// 视锥体
+/// </summary>
 public class Frustum : IClippingSpace, IProjector
 {
 	private Plane m_leftClippingPlane;
@@ -41,6 +44,11 @@ public class Frustum : IClippingSpace, IProjector
         m_ratio = (float)m_viewportHei / m_sizeHei;
     }
 
+    /// <summary>
+    /// 三角形剔除
+    /// </summary>
+    /// <param name="trangleList"></param>
+    /// <returns></returns>
 	public List<Trangle> Cliping(List<Trangle> trangleList)
     {
         //TODO 
@@ -48,14 +56,22 @@ public class Frustum : IClippingSpace, IProjector
 		return trangleList;
     }
 
-	public void ProcessPosition( Vector4 pos, out int x, out int y )
+    /// <summary>
+    /// 投影坐标计算
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+	public void CalculateProjection( Vector4 pos, out int x, out int y )
 	{
 		x = (int)((pos.x * m_d / pos.z + m_sizeWid / 2) * m_ratio);
 		y = (int)((pos.y * m_d / pos.z + m_sizeHei / 2) * m_ratio);
 	}
 
-    public bool IsPerspective()
-    {
-        return true;
-    }
+    /// <summary>
+    /// 是否是透视
+    /// </summary>
+    /// <returns></returns>
+    public bool IsPerspective() { return true; }
+
 }

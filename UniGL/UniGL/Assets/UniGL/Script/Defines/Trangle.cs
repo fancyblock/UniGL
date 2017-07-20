@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
 
+/// <summary>
+/// 三角形
+/// </summary>
 public class Trangle
 {
 	public Vertex[] m_vertexs;

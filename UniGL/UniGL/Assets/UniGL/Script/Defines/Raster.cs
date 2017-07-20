@@ -96,12 +96,20 @@ public class Raster
     }
 
 
+    /// <summary>
+    /// 只画点
+    /// </summary>
+    /// <param name="trangle"></param>
 	private void point_rasterize( Trangle trangle )
 	{
         foreach (Vertex vertex in trangle.m_vertexs)
             drawPixel(vertex.x, vertex.y, vertex.color, vertex.position.z);
 	}
 
+    /// <summary>
+    /// 画线
+    /// </summary>
+    /// <param name="trangle"></param>
 	private void line_rasterize( Trangle trangle )
 	{
         drawLine(trangle.m_vertexs[0], trangle.m_vertexs[1]);

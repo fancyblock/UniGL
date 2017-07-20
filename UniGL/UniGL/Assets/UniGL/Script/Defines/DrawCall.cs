@@ -2,6 +2,9 @@
 using UnityEngine;
 
 
+/// <summary>
+/// 一次描绘的信息
+/// </summary>
 public class DrawCall
 {
     private List<Vertex> m_vertexBuff;
@@ -12,6 +15,12 @@ public class DrawCall
 	private List<Trangle> m_trangleList;
 
 
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="vertexBuff"></param>
+    /// <param name="indexBuff"></param>
+    /// <param name="trangleCount"></param>
     public DrawCall(List<Vertex> vertexBuff, List<int> indexBuff, int trangleCount)
     {
         m_vertexBuff = vertexBuff;
@@ -21,6 +30,10 @@ public class DrawCall
 		m_verteices = new List<Vertex> (vertexBuff.Count);
     }
 
+    /// <summary>
+    /// 坐标变换
+    /// </summary>
+    /// <param name="matrix"></param>
     public void Transform( Matrix4x4 matrix )
     {
 		for (int i = 0; i < m_vertexBuff.Count; i++) 
@@ -33,6 +46,9 @@ public class DrawCall
 		}
     }
 
+    /// <summary>
+    /// 生成三角形列表
+    /// </summary>
     public void GenTrangleList()
     {
         m_trangleList = new List<Trangle>(m_trangleCount);
@@ -81,27 +97,30 @@ public class DrawCall
             m_trangleList.Remove(trangle);
     }
 
+    /// <summary>
+    /// 视线之外剔除
+    /// </summary>
+    /// <param name="clippingSpace"></param>
     public void Clipping( IClippingSpace clippingSpace )
     {
 		m_trangleList = clippingSpace.Cliping (m_trangleList);
     }
 
+    /// <summary>
+    /// 投影计算
+    /// </summary>
+    /// <param name="projector"></param>
     public void Projection( IProjector projector )
     {
 		foreach (Trangle trangle in m_trangleList) 
 		{
 			foreach (Vertex vertex in trangle.m_vertexs) 
-			{
-				projector.ProcessPosition (vertex.position, out vertex.x, out vertex.y);
-			}
+				projector.CalculateProjection (vertex.position, out vertex.x, out vertex.y);
 		}
     }
 
-    public List<Trangle> TRANGLE_LIST
-    {
-        get
-        {
-			return m_trangleList;
-        }
-    }
+    /// <summary>
+    /// 三角形列表 
+    /// </summary>
+    public List<Trangle> TRANGLE_LIST { get { return m_trangleList; } }
 }

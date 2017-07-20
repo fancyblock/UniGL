@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
 
+/// <summary>
+/// 顶点
+/// </summary>
 public class Vertex 
 {
     public Vector4 position;
