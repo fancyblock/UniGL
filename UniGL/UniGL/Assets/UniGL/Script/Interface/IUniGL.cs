@@ -19,4 +19,6 @@ public interface IUniGL
     void Draw(List<Vertex> vertexBuff, List<int> indexBuff, int trangleCount);
 
     void Present();
+
+    void SetLight(ILight light);
 }

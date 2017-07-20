@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -21,6 +22,7 @@ public class UniGL : IUniGL
     private IProjector m_projector;             // 提供投影矩阵
     private IClippingSpace m_clippingSpace;     // 空间裁剪
     private TextureSampler m_sampler;           // Texture Sampler
+    private ILight m_light;
 
     private LinkedList<DrawCall> m_drawCallList;
     private Raster m_raster; 
@@ -173,5 +175,14 @@ public class UniGL : IUniGL
     public void SetModelViewMatrix(Matrix4x4 modelViewMat)
     {
         m_modelViewMat = modelViewMat;
+    }
+
+    /// <summary>
+    /// 设置光照
+    /// </summary>
+    /// <param name="light"></param>
+    public void SetLight(ILight light)
+    {
+        m_light = light;
     }
 }
