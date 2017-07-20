@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 /// <summary>
 /// 光栅化
 /// </summary>
-public class UniGL
+public class UniGL : IUniGL
 {
     private Texture2D m_texture;
     private Color32[] m_buffer;

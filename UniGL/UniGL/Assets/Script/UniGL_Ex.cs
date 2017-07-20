@@ -12,7 +12,7 @@ public class UniGL_Ex : MonoBehaviour
     public int m_width;
     public int m_height;
 
-    private UniGL m_uniGL;
+    private IUniGL m_uniGL;
 
 	// Use this for initialization
 	void Awake ()
