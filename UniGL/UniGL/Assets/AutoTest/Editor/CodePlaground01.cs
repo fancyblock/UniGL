@@ -10,10 +10,11 @@ public class CodePlaground01
 	[Test]
 	public void CodeTest()
 	{
-		Vector3 v1 = new Vector3( 2, 3, 4 );
-		Vector4 v2 = v1;
-		v2.w = 2;
+		Vector3 v1 = new Vector3(1, 0, 0);
+        Vector3 v2 = new Vector3(1, 0, 0);
 
-		Debug.Log( (v2).ToString() );
+        float v = Vector3.Dot(v1, v2);
+
+        Debug.Log(v);
 	}
 }

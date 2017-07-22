@@ -107,6 +107,19 @@ public class DrawCall
     }
 
     /// <summary>
+    /// 应用光照
+    /// </summary>
+    /// <param name="light"></param>
+    public void ApplyLight( ILight light )
+    {
+        foreach( Trangle trangle in m_trangleList )
+        {
+            foreach (Vertex vertex in trangle.m_vertexs)
+                light.CalculateLight(vertex);
+        }
+    }
+
+    /// <summary>
     /// 投影计算
     /// </summary>
     /// <param name="projector"></param>

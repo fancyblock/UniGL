@@ -153,6 +153,8 @@ public class UniGL : IUniGL
             drawCall.GenTrangleList();
             drawCall.BackFaceCulling(m_projector.IsPerspective());
             drawCall.Clipping(m_clippingSpace);
+            if (m_light != null)
+                drawCall.ApplyLight(m_light);
             drawCall.Projection(m_projector);
 
             trangleLists.AddRange(drawCall.TRANGLE_LIST);
