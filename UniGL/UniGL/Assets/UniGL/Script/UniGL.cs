@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -142,6 +141,8 @@ public class UniGL : IUniGL
     /// <param name="tex"></param>
     public void BindTexture(int channel, Texture2D tex)
     {
+        Assert.IsTrue(tex != null);
+
         m_sampler.SetTexture( channel, tex );
     }
 

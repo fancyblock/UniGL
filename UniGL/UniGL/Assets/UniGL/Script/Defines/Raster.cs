@@ -154,23 +154,27 @@ public class Raster
 	}
 
     /// <summary>
-    /// 光栅化上三角形
+    /// 光栅化平底三角形
     /// </summary>
     /// <param name="trangle"></param>
     /// <param name="solidColor"></param>
     private void upTrangleRasterize( Trangle trangle, bool solidColor )
     {
-        //TODO 
+        sortVertex(trangle.m_vertexs);
+
+        line_rasterize(trangle);
     }
 
     /// <summary>
-    /// 光栅化下三角形
+    /// 光栅化平顶三角形
     /// </summary>
     /// <param name="trangle"></param>
     /// <param name="solidColor"></param>
     private void downTrangleRasterize( Trangle trangle, bool solidColor )
     {
-        //TODO 
+        sortVertex(trangle.m_vertexs);
+
+        line_rasterize(trangle);
     }
 
     /// <summary>
@@ -181,40 +185,26 @@ public class Raster
     private Trangle[] splitTrangle( Trangle trangle )
     {
         Trangle[] trangles = new Trangle[2];
-        int[] index = new int[] { 0, 1, 2 };
 
-        // 顶点按照y来排序
-        for( int i = 1; i <= 2; i++ )
-        {
-            if( trangle.m_vertexs[index[i]].y > trangle.m_vertexs[index[0]].y )
-            {
-                int temp = index[i];
-                index[i] = index[0];
-                index[0] = temp;
-            }
-        }
+        sortVertex(trangle.m_vertexs);
 
-        if( trangle.m_vertexs[index[2]].y > trangle.m_vertexs[index[1]].y )
-        {
-            int temp = index[1];
-            index[1] = index[2];
-            index[2] = temp;
-        }
-
-        Vertex upV = trangle.m_vertexs[index[0]];
-        Vertex midV = trangle.m_vertexs[index[1]];
-        Vertex downV = trangle.m_vertexs[index[2]];
+        Vertex upV = trangle.m_vertexs[0];
+        Vertex midV = trangle.m_vertexs[1];
+        Vertex downV = trangle.m_vertexs[2];
 
         Vertex midV2 = new Vertex();
 
         float ratio = (float)(upV.y - midV.y) / (float)(upV.y - downV.y);
-        midV2.position = Vector4.Lerp(upV.position, downV.position, ratio );
         midV2.x = upV.x + Mathf.RoundToInt( (float)(downV.x - upV.x) * ratio );
         midV2.y = midV.y;
 
-        //float ratio2 =
-        //midV2.color = Color32.Lerp(upV.color, downV.color, ratio);      //[TEMP]
-        //midV2.uv = ;
+        float rd = Mathf.Lerp(1.0f/upV.position.z, 1.0f/downV.position.z, ratio);
+        midV2.position = m_projdecor.ScreenToWorld(midV2.x, midV2.y, 1.0f / rd);
+        midV2.position.w = 1;
+
+        float ratio2 = (upV.position - midV2.position).magnitude / (upV.position - downV.position).magnitude;
+        midV2.color = Color32.Lerp(upV.color, downV.color, ratio2);
+        midV2.uv = Vector2.Lerp(upV.uv, downV.uv, ratio2);
 
         trangles[0] = new Trangle();
         trangles[0].m_vertexs = new Vertex[3] { upV, midV, midV2 };
@@ -223,6 +213,31 @@ public class Raster
         trangles[1].m_vertexs = new Vertex[3] { midV, midV2, downV };
 
         return trangles;
+    }
+
+    /// <summary>
+    /// 顶点按照从上往下从左往右的顺序排序
+    /// </summary>
+    /// <param name="vertices"></param>
+    private void sortVertex( Vertex[] vertices )
+    {
+        // 顶点按照y来排序
+        for (int i = 1; i <= 2; i++)
+        {
+            if (vertices[i].y > vertices[0].y || (vertices[i].y == vertices[0].y && vertices[i].x < vertices[0].x) )
+            {
+                Vertex temp = vertices[i];
+                vertices[i] = vertices[0];
+                vertices[0] = temp;
+            }
+        }
+
+        if (vertices[2].y > vertices[1].y || ( vertices[2].y == vertices[1].y && vertices[2].x < vertices[1].x ) )
+        {
+            Vertex temp = vertices[1];
+            vertices[1] = vertices[2];
+            vertices[2] = temp;
+        }
     }
 
     /// <summary>
@@ -238,7 +253,7 @@ public class Raster
     }
 
     /// <summary>
-    /// 是否是上三角形
+    /// 是否是平底三角形
     /// </summary>
     /// <param name="trangle"></param>
     /// <returns></returns>
@@ -259,7 +274,7 @@ public class Raster
     }
 
     /// <summary>
-    /// 是否是下三角形
+    /// 是否是平顶三角形
     /// </summary>
     /// <param name="trangle"></param>
     /// <returns></returns>
