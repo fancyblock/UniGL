@@ -55,11 +55,26 @@ public class ViewCube : IClippingSpace, IProjector
     /// <param name="pos"></param>
     /// <param name="x"></param>
     /// <param name="y"></param>
-	public void CalculateProjection( Vector4 pos, out int x, out int y )
+	public void WorldToScreen( Vector4 pos, out int x, out int y )
 	{
 		x = (int)( (pos.x + m_sizeWid / 2) * m_ratio );
 		y = (int)( (pos.y + m_sizeHei / 2) * m_ratio );
 	}
+
+    /// <summary>
+    /// 屏幕坐标到世界坐标
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="worldZ"></param>
+    /// <returns></returns>
+    public Vector3 ScreenToWorld(int x, int y, float worldZ)
+    {
+        float worldX = (float)x / m_ratio - m_sizeWid / 2.0f;
+        float worldY = (float)y / m_ratio - m_sizeHei / 2.0f;
+
+        return new Vector3(worldX, worldY, worldZ);
+    }
 
     /// <summary>
     /// 是否是透视

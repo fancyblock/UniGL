@@ -3,7 +3,9 @@
 
 public interface IProjector
 {
-	void CalculateProjection( Vector4 pos, out int x, out int y );
+	void WorldToScreen( Vector4 pos, out int x, out int y );
+
+    Vector3 ScreenToWorld(int x, int y, float worldZ);
 
     bool IsPerspective();
 }

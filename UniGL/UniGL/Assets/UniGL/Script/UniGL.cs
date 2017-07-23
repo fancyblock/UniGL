@@ -72,6 +72,8 @@ public class UniGL : IUniGL
 
         m_projector = frustum;
         m_clippingSpace = frustum;
+
+        m_raster.SetProjector(m_projector);
     }
 
     /// <summary>
@@ -86,6 +88,8 @@ public class UniGL : IUniGL
 
         m_projector = viewCube;
         m_clippingSpace = viewCube;
+
+        m_raster.SetProjector(m_projector);
     }
 
     /// <summary>

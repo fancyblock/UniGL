@@ -22,6 +22,7 @@ public class Raster
     private float[] m_depthBuffer;
 
     private TextureSampler m_sampler;
+    private IProjector m_projdecor;
 
 
     /// <summary>
@@ -34,7 +35,7 @@ public class Raster
         m_width = width;
         m_height = height;
 
-		RASTER_TYPE = RasterType.Line;
+		RASTER_TYPE = RasterType.SolidColor;
     }
 
 	/// <summary>
@@ -62,6 +63,15 @@ public class Raster
     }
 
     /// <summary>
+    /// 设置投影计算接口（透视修正计算用）
+    /// </summary>
+    /// <param name="projector"></param>
+    public void SetProjector( IProjector projector )
+    {
+        m_projdecor = projector;
+    }
+
+    /// <summary>
     /// UV采样
     /// </summary>
     /// <param name="samper"></param>
@@ -85,10 +95,10 @@ public class Raster
 			point_rasterize (trangle);
 			break;
 		case RasterType.SolidColor:
-			solid_rasterize (trangle);
+            trangle_rasterize(trangle, true);
 			break;
 		case RasterType.Texture:
-			texture_rasterize (trangle);
+            trangle_rasterize(trangle, false);
 			break;
 		default:
 			break;
@@ -117,16 +127,165 @@ public class Raster
         drawLine(trangle.m_vertexs[2], trangle.m_vertexs[0]);
     }
 
-	private void solid_rasterize( Trangle trangle )
+    /// <summary>
+    /// 三角形光栅化
+    /// </summary>
+    /// <param name="trangle"></param>
+	private void trangle_rasterize( Trangle trangle, bool solidColor )
 	{
+        if (isCollinear(trangle))       // 共线的三角形暂不绘制
+            return;
+
+        if( isUpTrangle( trangle ) )
+        {
+            upTrangleRasterize(trangle, solidColor);
+        }
+        else if( isDownTrangle( trangle ) )
+        {
+            downTrangleRasterize(trangle, solidColor);
+        }
+        else
+        {
+            Trangle[] trangles = splitTrangle(trangle);
+
+            upTrangleRasterize(trangles[0], solidColor);
+            downTrangleRasterize(trangles[1], solidColor);
+        }
+	}
+
+    /// <summary>
+    /// 光栅化上三角形
+    /// </summary>
+    /// <param name="trangle"></param>
+    /// <param name="solidColor"></param>
+    private void upTrangleRasterize( Trangle trangle, bool solidColor )
+    {
         //TODO 
-	}
+    }
 
-	private void texture_rasterize( Trangle trangle )
-	{
-        //TODO  
-	}
+    /// <summary>
+    /// 光栅化下三角形
+    /// </summary>
+    /// <param name="trangle"></param>
+    /// <param name="solidColor"></param>
+    private void downTrangleRasterize( Trangle trangle, bool solidColor )
+    {
+        //TODO 
+    }
 
+    /// <summary>
+    /// 将三角形切分成上三角形和下三角形 
+    /// </summary>
+    /// <param name="trangle"></param>
+    /// <returns></returns>
+    private Trangle[] splitTrangle( Trangle trangle )
+    {
+        Trangle[] trangles = new Trangle[2];
+        int[] index = new int[] { 0, 1, 2 };
+
+        // 顶点按照y来排序
+        for( int i = 1; i <= 2; i++ )
+        {
+            if( trangle.m_vertexs[index[i]].y > trangle.m_vertexs[index[0]].y )
+            {
+                int temp = index[i];
+                index[i] = index[0];
+                index[0] = temp;
+            }
+        }
+
+        if( trangle.m_vertexs[index[2]].y > trangle.m_vertexs[index[1]].y )
+        {
+            int temp = index[1];
+            index[1] = index[2];
+            index[2] = temp;
+        }
+
+        Vertex upV = trangle.m_vertexs[index[0]];
+        Vertex midV = trangle.m_vertexs[index[1]];
+        Vertex downV = trangle.m_vertexs[index[2]];
+
+        Vertex midV2 = new Vertex();
+
+        float ratio = (float)(upV.y - midV.y) / (float)(upV.y - downV.y);
+        midV2.position = Vector4.Lerp(upV.position, downV.position, ratio );
+        midV2.x = upV.x + Mathf.RoundToInt( (float)(downV.x - upV.x) * ratio );
+        midV2.y = midV.y;
+
+        //float ratio2 =
+        //midV2.color = Color32.Lerp(upV.color, downV.color, ratio);      //[TEMP]
+        //midV2.uv = ;
+
+        trangles[0] = new Trangle();
+        trangles[0].m_vertexs = new Vertex[3] { upV, midV, midV2 };
+
+        trangles[1] = new Trangle();
+        trangles[1].m_vertexs = new Vertex[3] { midV, midV2, downV };
+
+        return trangles;
+    }
+
+    /// <summary>
+    /// 是否成一条线
+    /// </summary>
+    /// <param name="trangle"></param>
+    /// <returns></returns>
+    private bool isCollinear( Trangle trangle )
+    {
+        //TODO 
+
+        return false;
+    }
+
+    /// <summary>
+    /// 是否是上三角形
+    /// </summary>
+    /// <param name="trangle"></param>
+    /// <returns></returns>
+    private bool isUpTrangle( Trangle trangle )
+    {
+        int y0 = trangle.m_vertexs[0].y;
+        int y1 = trangle.m_vertexs[1].y;
+        int y2 = trangle.m_vertexs[2].y;
+
+        if (y0 > y1 && y1 == y2)
+            return true;
+        if (y1 > y0 && y0 == y2)
+            return true;
+        if (y2 > y0 && y0 == y1)
+            return true;
+
+        return false;
+    }
+
+    /// <summary>
+    /// 是否是下三角形
+    /// </summary>
+    /// <param name="trangle"></param>
+    /// <returns></returns>
+    private bool isDownTrangle( Trangle trangle )
+    {
+        int y0 = trangle.m_vertexs[0].y;
+        int y1 = trangle.m_vertexs[1].y;
+        int y2 = trangle.m_vertexs[2].y;
+
+        if (y0 < y1 && y1 == y2)
+            return true;
+        if (y1 < y0 && y0 == y2)
+            return true;
+        if (y2 < y0 && y0 == y1)
+            return true;
+
+        return false;
+    }
+
+    /// <summary>
+    /// 只画像素
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="color"></param>
+    /// <param name="z"></param>
     private void drawPixel( int x, int y, Color32 color, float z )
     {
         if (x >= 0 && x < m_width && y >= 0 && y < m_height)
@@ -148,6 +307,11 @@ public class Raster
         }
     }
 
+    /// <summary>
+    /// DDA画线
+    /// </summary>
+    /// <param name="pt1"></param>
+    /// <param name="pt2"></param>
     private void drawLine( Vertex pt1, Vertex pt2 )
     {
         if (pt1.x == pt2.x)

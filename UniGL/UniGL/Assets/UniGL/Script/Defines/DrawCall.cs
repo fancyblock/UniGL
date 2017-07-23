@@ -128,7 +128,7 @@ public class DrawCall
 		foreach (Trangle trangle in m_trangleList) 
 		{
 			foreach (Vertex vertex in trangle.m_vertexs) 
-				projector.CalculateProjection (vertex.position, out vertex.x, out vertex.y);
+				projector.WorldToScreen (vertex.position, out vertex.x, out vertex.y);
 		}
     }
 

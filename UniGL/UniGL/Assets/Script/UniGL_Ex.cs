@@ -59,6 +59,9 @@ public class UniGL_Ex : MonoBehaviour
 		{
             0, 1, 2, 0, 2, 3
         };
+
+        DirLight light = new DirLight((new Vector3(1, 1, 5)).normalized);
+        m_uniGL.SetLight(light);
     }
 
     private float m_angle = 0;
