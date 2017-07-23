@@ -162,7 +162,22 @@ public class Raster
     {
         sortVertex(trangle.m_vertexs);
 
-        line_rasterize(trangle);
+        Vertex top = trangle.m_vertexs[0];
+        Vertex left = trangle.m_vertexs[1];
+        Vertex right = trangle.m_vertexs[2];
+
+        int upY = top.y;
+        int downY = left.y;
+
+        float leftK = ;
+        float rightK = ;
+
+        drawPixel(top.x, top.y, m_sampler.Sampling(top.uv.x, top.uv.y), top.position.z);
+
+        for( int i = upY + 1; i <= downY; i++ )
+        {
+            //TODO 
+        }
     }
 
     /// <summary>
@@ -174,7 +189,11 @@ public class Raster
     {
         sortVertex(trangle.m_vertexs);
 
-        line_rasterize(trangle);
+        Vertex left = trangle.m_vertexs[0];
+        Vertex right = trangle.m_vertexs[1];
+        Vertex down = trangle.m_vertexs[2];
+
+        //TODO 
     }
 
     /// <summary>
