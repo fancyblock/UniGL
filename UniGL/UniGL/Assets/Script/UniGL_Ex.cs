@@ -46,7 +46,7 @@ public class UniGL_Ex : MonoBehaviour
         m_uniGL.Perspective(3, 5);
         m_uniGL.ClearColor(Color.gray);
 
-        m_uniGL.BindTexture(0, Resources.Load<Texture2D>("Texture/grid01"));
+        m_uniGL.BindTexture(0, Resources.Load<Texture2D>("Texture/grid02"));
 
         m_vertBuff = new List<Vertex>() 
 		{
@@ -72,11 +72,11 @@ public class UniGL_Ex : MonoBehaviour
         m_uniGL.Clear(true, true);
 
         Matrix4x4 mat = Matrix4x4.identity;
-		mat *= Matrix4x4.Translate (new Vector3 (0, 0, 8));
-        mat *= Matrix4x4.Rotate(Quaternion.Euler(m_angle/3,m_angle,0));
+        mat *= Matrix4x4.Translate(new Vector3(0, 0, 8));
+        mat *= Matrix4x4.Rotate(Quaternion.Euler(m_angle / 3, m_angle, 0));
         m_angle += 0.3f;
 
-		m_uniGL.SetModelViewMatrix(mat);
+        m_uniGL.SetModelViewMatrix(mat);
 
         // 绘制一个立方体
         {
