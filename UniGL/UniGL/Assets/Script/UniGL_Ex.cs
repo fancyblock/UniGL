@@ -46,7 +46,7 @@ public class UniGL_Ex : MonoBehaviour
         m_uniGL.Perspective(3, 5);
         m_uniGL.ClearColor(Color.gray);
 
-        m_uniGL.BindTexture(0, Resources.Load<Texture2D>("Texture/logo"));
+        m_uniGL.BindTexture(0, Resources.Load<Texture2D>("Texture/grid01"));
 
         m_vertBuff = new List<Vertex>() 
 		{
