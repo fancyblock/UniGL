@@ -10,6 +10,7 @@ public class Vertex
     public Vector3 normal;
     public Color32 color;
     public Vector2 uv;
+    public float intensity;
 
     public int x;
     public int y;

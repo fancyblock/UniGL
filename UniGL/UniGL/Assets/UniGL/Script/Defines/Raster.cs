@@ -22,7 +22,7 @@ public class Raster
     private float[] m_depthBuffer;
 
     private TextureSampler m_sampler;
-    private IProjector m_projdecor;
+    private IProjector m_projector;
 
 
     /// <summary>
@@ -68,7 +68,7 @@ public class Raster
     /// <param name="projector"></param>
     public void SetProjector( IProjector projector )
     {
-        m_projdecor = projector;
+        m_projector = projector;
     }
 
     /// <summary>
@@ -169,14 +169,58 @@ public class Raster
         int upY = top.y;
         int downY = left.y;
 
-        //float leftK = ;
-        //float rightK = ;
+        float leftK = (float)(left.x - top.x) / (float)(upY - downY);
+        float rightK = (float)(right.x - top.x) / (float)(upY - downY);
+
+        float leftX = top.x;
+        float rightX = top.x;
 
         drawPixel(top.x, top.y, m_sampler.Sampling(top.uv.x, top.uv.y), top.position.z);
 
-        for( int i = upY + 1; i <= downY; i++ )
+        Vector2 topPos = new Vector2(top.x, top.y);
+
+        float leftEdgeLen = (new Vector2(left.x, left.y) - topPos).magnitude;
+        float rightEdgeLen = (new Vector2(right.x, right.y) - topPos).magnitude;
+
+        for( int i = upY - 1; i >= downY; i-- )
         {
+            leftX += leftK;
+            rightX += rightK;
+
+            Vector2 midLeftPos = new Vector2( leftX, i );
+            Vector2 midRightPos = new Vector2( rightX, i );
+
+            float leftRatio = (midLeftPos - topPos).magnitude / leftEdgeLen;
+            float rightRatio = (midRightPos - topPos).magnitude / rightEdgeLen;
+
+            float midLeftRd = Mathf.Lerp(1.0f / top.position.z, 1.0f / left.position.z, leftRatio);         // 左边的1/z
+            float midRightRd = Mathf.Lerp(1.0f / top.position.z, 1.0f / right.position.z, rightRatio);      // 右边的1/z
+
+            int iLeftX = Mathf.RoundToInt(leftX);
+            int iRightX = Mathf.RoundToInt(rightX);
+
+            Vector3 midLeftWorldPos = m_projector.ScreenToWorld(iLeftX, i, 1.0f / midLeftRd);
+            Vector3 midRightWorldPos = m_projector.ScreenToWorld(iRightX, i, 1.0f / midRightRd);
+            float horiLen = (midLeftWorldPos - midRightWorldPos).magnitude;
+
             //TODO 
+
+            for( int j = iLeftX; j <= iRightX; j++ )
+            {
+                if (j < 0 || j >= m_width)
+                    continue;
+
+                Vector2 mid = new Vector2(j, i);
+
+                float midRatio = (float)(j - leftX) / (rightX - leftX);
+                float midRd = Mathf.Lerp( midLeftRd, midRightRd, midRatio );
+
+                Vector3 originPos = m_projector.ScreenToWorld(j, i, 1.0f / midRd);
+
+                float midRatio2 = (originPos - midLeftWorldPos).magnitude / horiLen;
+
+                //TODO 
+            }
         }
     }
 
@@ -223,12 +267,13 @@ public class Raster
         midV2.y = midV.y;
 
         float rd = Mathf.Lerp(1.0f/upV.position.z, 1.0f/downV.position.z, ratio);
-        midV2.position = m_projdecor.ScreenToWorld(midV2.x, midV2.y, 1.0f / rd);
+        midV2.position = m_projector.ScreenToWorld(midV2.x, midV2.y, 1.0f / rd);
         midV2.position.w = 1;
 
         float ratio2 = (upV.position - midV2.position).magnitude / (upV.position - downV.position).magnitude;
         midV2.color = Color32.Lerp(upV.color, downV.color, ratio2);
         midV2.uv = Vector2.Lerp(upV.uv, downV.uv, ratio2);
+        midV2.intensity = Mathf.Lerp(upV.intensity, downV.intensity, ratio2);
 
         trangles[0] = new Trangle();
         trangles[0].m_vertexs = new Vertex[3] { upV, midV, midV2 };

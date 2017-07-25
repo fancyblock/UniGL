@@ -21,11 +21,6 @@ public class DirLight : ILight
     /// <param name="vertex"></param>
     public void CalculateLight(Vertex vertex)
     {
-        float intensity = Vector3.Dot(m_lightDir, vertex.normal);
-
-        if (intensity <= 0)
-            vertex.color = Color.black;
-        else
-            vertex.color = Color32.Lerp(Color.black, vertex.color, intensity);
+        vertex.intensity = Vector3.Dot(m_lightDir, vertex.normal);
     }
 }
