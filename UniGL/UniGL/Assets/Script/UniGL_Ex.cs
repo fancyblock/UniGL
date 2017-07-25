@@ -50,10 +50,10 @@ public class UniGL_Ex : MonoBehaviour
 
         m_vertBuff = new List<Vertex>() 
 		{
-            new Vertex( new Vector3(-2, 2, -2), new Vector2(0, 0) ),
-            new Vertex( new Vector3(2, 2, -2), new Vector2(1, 0) ),
-            new Vertex( new Vector3(2, -2, -2), new Vector2(1, 1) ),
-            new Vertex( new Vector3(-2, -2, -2), new Vector2(0, 1) ),
+            new Vertex( new Vector3(-2, 2, -2), new Vector2(0, 0), new Vector3(0,0,-1) ),
+            new Vertex( new Vector3(2, 2, -2), new Vector2(1, 0), new Vector3(0,0,-1) ),
+            new Vertex( new Vector3(2, -2, -2), new Vector2(1, 1), new Vector3(0,0,-1) ),
+            new Vertex( new Vector3(-2, -2, -2), new Vector2(0, 1), new Vector3(0,0,-1) ),
         };
         m_indexBuf = new List<int>() 
 		{

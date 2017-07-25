@@ -182,7 +182,12 @@ public class Raster
         float leftEdgeLen = (new Vector2(left.x, left.y) - topPos).magnitude;
         float rightEdgeLen = (new Vector2(right.x, right.y) - topPos).magnitude;
 
-        for( int i = upY - 1; i >= downY; i-- )
+        float leftWorldEdgeLen = (top.position - left.position).magnitude;
+        float rightWorldEdgeLen = (top.position - right.position).magnitude;
+
+        Vector3 topWorldPos = new Vector3(top.position.x, top.position.y, top.position.z);
+
+        for ( int i = upY - 1; i >= downY; i-- )
         {
             leftX += leftK;
             rightX += rightK;
@@ -199,13 +204,22 @@ public class Raster
             int iLeftX = Mathf.RoundToInt(leftX);
             int iRightX = Mathf.RoundToInt(rightX);
 
-            Vector3 midLeftWorldPos = m_projector.ScreenToWorld(iLeftX, i, 1.0f / midLeftRd);
-            Vector3 midRightWorldPos = m_projector.ScreenToWorld(iRightX, i, 1.0f / midRightRd);
-            float horiLen = (midLeftWorldPos - midRightWorldPos).magnitude;
+            Vector3 leftWorldPos = m_projector.ScreenToWorld(iLeftX, i, 1.0f / midLeftRd);
+            Vector3 rightWorldPos = m_projector.ScreenToWorld(iRightX, i, 1.0f / midRightRd);
+            float horiLen = (leftWorldPos - rightWorldPos).magnitude;
 
-            //TODO 
+            float leftWorldRatio = (topWorldPos - leftWorldPos).magnitude / leftWorldEdgeLen;
+            float rightWorldRatio = (topWorldPos - leftWorldPos).magnitude / rightWorldEdgeLen;
 
-            for( int j = iLeftX; j <= iRightX; j++ )
+            Color32 leftColor = Color32.Lerp(top.color, left.color, leftWorldRatio);
+            Vector2 leftUV = Vector2.Lerp(top.uv, left.uv, leftWorldRatio);
+            float leftIntensity = Mathf.Lerp(top.intensity, left.intensity, leftWorldRatio);
+
+            Color32 rightColor = Color32.Lerp(top.color, right.color, rightWorldRatio);
+            Vector2 rightUV = Vector2.Lerp(top.uv, right.uv, rightWorldRatio);
+            float rightIntensity = Mathf.Lerp(top.intensity, right.intensity, rightWorldRatio);
+
+            for ( int j = iLeftX; j <= iRightX; j++ )
             {
                 if (j < 0 || j >= m_width)
                     continue;
@@ -217,9 +231,17 @@ public class Raster
 
                 Vector3 originPos = m_projector.ScreenToWorld(j, i, 1.0f / midRd);
 
-                float midRatio2 = (originPos - midLeftWorldPos).magnitude / horiLen;
+                float midRatio2 = (originPos - leftWorldPos).magnitude / horiLen;
 
-                //TODO 
+                float intensity = Mathf.Lerp(leftIntensity, rightIntensity, midRatio2);
+                Vector2 uv = Vector2.Lerp(leftUV, rightUV, midRatio2);
+
+                Color32 color = m_sampler.Sampling(uv.x, uv.y);
+                color.r = (byte)(color.r * intensity);
+                color.g = (byte)(color.g * intensity);
+                color.b = (byte)(color.b * intensity);
+
+                drawPixel(j, i, color, originPos.z);
             }
         }
     }
