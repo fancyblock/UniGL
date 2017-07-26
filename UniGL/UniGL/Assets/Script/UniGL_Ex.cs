@@ -20,16 +20,6 @@ public class UniGL_Ex : MonoBehaviour
         // create texture 
         Texture2D texture = new Texture2D( m_width, m_height, TextureFormat.RGBA32, false, false);
         m_rawImage.texture = texture;
-        m_rawImage.SetNativeSize();
-
-        m_scaler.referenceResolution = new Vector2(m_width, m_height);
-        m_scaler.matchWidthOrHeight = m_width > m_height ? 0.0f : 1.0f;
-
-        // adjust size scale 
-        if (Screen.width > Screen.height)
-            m_camera.orthographicSize = texture.height / 2;
-        else
-            m_camera.orthographicSize = texture.height;             ///////[TEMP]
 
         m_uniGL = new UniGL(texture);
 
