@@ -5,7 +5,7 @@ public enum RasterType
 {
 	Point,
 	Line,
-	SolidColor,
+	Solid,
 	Texture,
 }
 
@@ -94,7 +94,7 @@ public class Raster
 		case RasterType.Point:
 			point_rasterize (trangle);
 			break;
-		case RasterType.SolidColor:
+		case RasterType.Solid:
             trangle_rasterize(trangle, true);
 			break;
 		case RasterType.Texture:

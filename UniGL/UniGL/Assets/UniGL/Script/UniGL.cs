@@ -147,6 +147,15 @@ public class UniGL
     }
 
     /// <summary>
+    /// 设置渲染类型
+    /// </summary>
+    /// <param name="type"></param>
+    public void SetRenderType( RasterType type )
+    {
+        m_raster.RASTER_TYPE = type;
+    }
+
+    /// <summary>
     /// 渲染当前的内容
     /// </summary>
     public void Present()
