@@ -175,7 +175,11 @@ public class Raster
         float leftX = top.x;
         float rightX = top.x;
 
-        drawPixel(top.x, top.y, m_sampler.Sampling(top.uv.x, top.uv.y), top.position.z);
+        Color32 color = m_sampler.Sampling(top.uv.x, top.uv.y);
+        color.r = (byte)(color.r * top.intensity);
+        color.g = (byte)(color.g * top.intensity);
+        color.b = (byte)(color.b * top.intensity);
+        drawPixel(top.x, top.y, color, top.position.z);
 
         Vector2 topPos = new Vector2(top.x, top.y);
         Vector3 topWorldPos = new Vector3(top.position.x, top.position.y, top.position.z);
@@ -233,7 +237,7 @@ public class Raster
                 float intensity = Mathf.Lerp(leftIntensity, rightIntensity, midRatio2);
                 Vector2 uv = Vector2.Lerp(leftUV, rightUV, midRatio2);
 
-                Color32 color = m_sampler.Sampling(uv.x, uv.y);
+                color = m_sampler.Sampling(uv.x, uv.y);
                 color.r = (byte)(color.r * intensity);
                 color.g = (byte)(color.g * intensity);
                 color.b = (byte)(color.b * intensity);
@@ -273,6 +277,8 @@ public class Raster
 
         float leftWorldEdgeLen = (down.position - left.position).magnitude;
         float rightWorldEdgeLen = (down.position - right.position).magnitude;
+
+        Color32 color;
 
         for ( int i = upY; i > downY; i-- )
         {
@@ -318,7 +324,7 @@ public class Raster
                 float intensity = Mathf.Lerp(leftIntensity, rightIntensity, midRatio2);
                 Vector2 uv = Vector2.Lerp(leftUV, rightUV, midRatio2);
 
-                Color32 color = m_sampler.Sampling(uv.x, uv.y);
+                color = m_sampler.Sampling(uv.x, uv.y);
                 color.r = (byte)(color.r * intensity);
                 color.g = (byte)(color.g * intensity);
                 color.b = (byte)(color.b * intensity);
@@ -330,7 +336,12 @@ public class Raster
             rightX += rightK;
         }
 
-        drawPixel(down.x, down.y, m_sampler.Sampling(down.uv.x, down.uv.y), down.position.z);
+        color = m_sampler.Sampling(down.uv.x, down.uv.y);
+        color.r = (byte)(color.r * down.intensity);
+        color.g = (byte)(color.g * down.intensity);
+        color.b = (byte)(color.b * down.intensity);
+
+        drawPixel(down.x, down.y, color, down.position.z);
     }
 
     /// <summary>
