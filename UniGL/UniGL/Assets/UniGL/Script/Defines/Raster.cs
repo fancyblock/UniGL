@@ -133,32 +133,53 @@ public class Raster
     /// <param name="trangle"></param>
 	private void trangle_rasterize( Trangle trangle, bool solidColor )
 	{
-        if (isCollinear(trangle))       // 共线的三角形暂不绘制
-            return;
-
         if( isUpTrangle( trangle ) )
         {
-            upTrangleRasterize(trangle, solidColor);
+            if (solidColor)
+                upTrangleSolidRasterize(trangle);
+            else
+                upTrangleRasterize(trangle);
         }
         else if( isDownTrangle( trangle ) )
         {
-            downTrangleRasterize(trangle, solidColor);
+            if (solidColor)
+                downTrangleSolidRasterize(trangle);
+            else
+                downTrangleRasterize(trangle);
         }
         else
         {
             Trangle[] trangles = splitTrangle(trangle);
 
-            upTrangleRasterize(trangles[0], solidColor);
-            downTrangleRasterize(trangles[1], solidColor);
+            if (solidColor)
+            {
+                upTrangleSolidRasterize(trangles[0]);
+                downTrangleSolidRasterize(trangles[1]);
+            }
+            else
+            {
+                upTrangleRasterize(trangles[0]);
+                downTrangleRasterize(trangles[1]);
+            }
         }
 	}
+
+    private void upTrangleSolidRasterize(Trangle trangle)
+    {
+        //TODO 
+    }
+
+    private void downTrangleSolidRasterize(Trangle trangle)
+    {
+        //TODO 
+    }
 
     /// <summary>
     /// 光栅化平底三角形
     /// </summary>
     /// <param name="trangle"></param>
     /// <param name="solidColor"></param>
-    private void upTrangleRasterize( Trangle trangle, bool solidColor )
+    private void upTrangleRasterize( Trangle trangle )
     {
         sortVertex(trangle.m_vertexs);
 
@@ -252,7 +273,7 @@ public class Raster
     /// </summary>
     /// <param name="trangle"></param>
     /// <param name="solidColor"></param>
-    private void downTrangleRasterize( Trangle trangle, bool solidColor )
+    private void downTrangleRasterize( Trangle trangle )
     {
         sortVertex(trangle.m_vertexs);
 
@@ -405,18 +426,6 @@ public class Raster
             vertices[1] = vertices[2];
             vertices[2] = temp;
         }
-    }
-
-    /// <summary>
-    /// 是否成一条线
-    /// </summary>
-    /// <param name="trangle"></param>
-    /// <returns></returns>
-    private bool isCollinear( Trangle trangle )
-    {
-        //TODO 
-
-        return false;
     }
 
     /// <summary>

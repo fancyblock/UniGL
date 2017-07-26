@@ -73,6 +73,21 @@ public class GlobalWork : MonoBehaviour
                 string name = tog.gameObject.name;
 
                 m_renderer.SetRenderType(name);
+
+                // [HACK]
+                if (name == "Texture")
+                {
+                    m_renderer.SetOrtho(false);
+                    
+                    foreach( Toggle pTog in m_projections )
+                    {
+                        if (pTog.gameObject.name == "Orth")
+                            pTog.isOn = false;
+                        else
+                            pTog.isOn = true;
+                    }
+                }
+                //[HACK]
             }
         }
     }
