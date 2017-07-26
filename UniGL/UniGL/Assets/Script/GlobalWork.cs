@@ -29,12 +29,23 @@ public class GlobalWork : MonoBehaviour
 
     public void onTexChange()
     {
-        //TODO 
+        foreach( Toggle tog in m_textures )
+        {
+            if( tog.isOn )
+            {
+                string name = tog.gameObject.name;
+
+                m_renderer.SetTexture(name);
+            }
+        }
     }
 
     public void onLightChange()
     {
-        //TODO 
+        if (m_light.isOn)
+            m_renderer.SetLightOn(true);
+        else
+            m_renderer.SetLightOn(false);
     }
 
     public void onProjectChange()
@@ -55,6 +66,14 @@ public class GlobalWork : MonoBehaviour
 
     public void onRenderTypeChange()
     {
-        //TODO 
+        foreach( Toggle tog in m_renderTypes )
+        {
+            if( tog.isOn )
+            {
+                string name = tog.gameObject.name;
+
+                m_renderer.SetRenderType(name);
+            }
+        }
     }
 }
