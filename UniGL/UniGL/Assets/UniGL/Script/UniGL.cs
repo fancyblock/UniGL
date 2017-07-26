@@ -165,7 +165,8 @@ public class UniGL
         foreach (DrawCall drawCall in m_drawCallList)
         {
             drawCall.GenTrangleList();
-            drawCall.BackFaceCulling(m_projector.IsPerspective());
+            if( m_raster.RASTER_TYPE != RasterType.Point )
+                drawCall.BackFaceCulling(m_projector.IsPerspective());
             drawCall.Clipping(m_clippingSpace);
             if (m_light != null)
                 drawCall.ApplyLight(m_light);

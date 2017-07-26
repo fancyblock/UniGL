@@ -61,7 +61,10 @@ public class DrawCall
             int indexBase = i * 3;
 
             for (int j = 0; j < 3; j++)
+            {
                 trangle.m_vertexs[j] = m_verteices[m_indexbuff[indexBase + j]];
+                trangle.m_vertexs[j].intensity = 1.0f;
+            }
 
             m_trangleList.Add(trangle);
         }
