@@ -22,5 +22,8 @@ public class DirLight : ILight
     public void CalculateLight(Vertex vertex)
     {
         vertex.intensity = Vector3.Dot(m_lightDir, vertex.normal);
+
+        if (vertex.intensity < 0)
+            vertex.intensity = 0;
     }
 }
