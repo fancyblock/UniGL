@@ -95,10 +95,8 @@ public class Raster
 			point_rasterize (trangle);
 			break;
 		case RasterType.Solid:
-            trangle_rasterize(trangle, true);
-			break;
 		case RasterType.Texture:
-            trangle_rasterize(trangle, false);
+            trangle_rasterize(trangle);
 			break;
 		default:
 			break;
@@ -131,48 +129,24 @@ public class Raster
     /// 三角形光栅化
     /// </summary>
     /// <param name="trangle"></param>
-	private void trangle_rasterize( Trangle trangle, bool solidColor )
+	private void trangle_rasterize( Trangle trangle )
 	{
         if( isUpTrangle( trangle ) )
         {
-            if (solidColor)
-                upTrangleSolidRasterize(trangle);
-            else
-                upTrangleRasterize(trangle);
+            upTrangleRasterize(trangle);
         }
         else if( isDownTrangle( trangle ) )
         {
-            if (solidColor)
-                downTrangleSolidRasterize(trangle);
-            else
-                downTrangleRasterize(trangle);
+            downTrangleRasterize(trangle);
         }
         else
         {
             Trangle[] trangles = splitTrangle(trangle);
 
-            if (solidColor)
-            {
-                upTrangleSolidRasterize(trangles[0]);
-                downTrangleSolidRasterize(trangles[1]);
-            }
-            else
-            {
-                upTrangleRasterize(trangles[0]);
-                downTrangleRasterize(trangles[1]);
-            }
+            upTrangleRasterize(trangles[0]);
+            downTrangleRasterize(trangles[1]);
         }
 	}
-
-    private void upTrangleSolidRasterize(Trangle trangle)
-    {
-        //TODO 
-    }
-
-    private void downTrangleSolidRasterize(Trangle trangle)
-    {
-        //TODO 
-    }
 
     /// <summary>
     /// 光栅化平底三角形
@@ -196,7 +170,7 @@ public class Raster
         float leftX = top.x;
         float rightX = top.x;
 
-        Color32 color = m_sampler.Sampling(top.uv.x, top.uv.y);
+        Color32 color = RASTER_TYPE == RasterType.Solid ? top.color : m_sampler.Sampling(top.uv.x, top.uv.y);
         color.r = (byte)(color.r * top.intensity);
         color.g = (byte)(color.g * top.intensity);
         color.b = (byte)(color.b * top.intensity);
@@ -235,10 +209,23 @@ public class Raster
             float leftWorldRatio = (topWorldPos - leftWorldPos).magnitude / leftWorldEdgeLen;
             float rightWorldRatio = (topWorldPos - rightWorldPos).magnitude / rightWorldEdgeLen;
 
-            Vector2 leftUV = Vector2.Lerp(top.uv, left.uv, leftWorldRatio);
-            float leftIntensity = Mathf.Lerp(top.intensity, left.intensity, leftWorldRatio);
+            Vector2 leftUV = Vector2.zero;
+            Vector2 rightUV = Vector2.zero;
+            Color32 leftColor = Color.black;
+            Color32 rightColor = Color.black;
 
-            Vector2 rightUV = Vector2.Lerp(top.uv, right.uv, rightWorldRatio);
+            if (RASTER_TYPE == RasterType.Solid)
+            {
+                leftColor = Color32.Lerp(top.color, left.color, leftWorldRatio);
+                rightColor = Color32.Lerp(top.color, right.color, rightWorldRatio);
+            }
+            else
+            {
+                leftUV = Vector2.Lerp(top.uv, left.uv, leftWorldRatio);
+                rightUV = Vector2.Lerp(top.uv, right.uv, rightWorldRatio);
+            }
+
+            float leftIntensity = Mathf.Lerp(top.intensity, left.intensity, leftWorldRatio);
             float rightIntensity = Mathf.Lerp(top.intensity, right.intensity, rightWorldRatio);
 
             int pixelIndex = i * m_width + iLeftX;
@@ -261,9 +248,19 @@ public class Raster
                 float midRatio2 = (originPos - leftWorldPos).magnitude / horiLen;
 
                 float intensity = Mathf.Lerp(leftIntensity, rightIntensity, midRatio2);
-                Vector2 uv = Vector2.Lerp(leftUV, rightUV, midRatio2);
 
-                color = m_sampler.Sampling(uv.x, uv.y);
+                Vector2 uv;
+
+                if (RASTER_TYPE == RasterType.Solid)
+                {
+                    color = Color32.Lerp(leftColor, rightColor, midRatio2);
+                }
+                else 
+                {
+                    uv = Vector2.Lerp(leftUV, rightUV, midRatio2);
+                    color = m_sampler.Sampling(uv.x, uv.y);
+                }
+
                 color.r = (byte)(color.r * intensity);
                 color.g = (byte)(color.g * intensity);
                 color.b = (byte)(color.b * intensity);
@@ -327,10 +324,23 @@ public class Raster
             float leftWorldRatio = (downWorldPos - leftWorldPos).magnitude / leftWorldEdgeLen;
             float rightWorldRatio = (downWorldPos - rightWorldPos).magnitude / rightWorldEdgeLen;
 
-            Vector2 leftUV = Vector2.Lerp(down.uv, left.uv, leftWorldRatio);
-            float leftIntensity = Mathf.Lerp(down.intensity, left.intensity, leftWorldRatio);
+            Vector2 leftUV = Vector2.zero;
+            Vector2 rightUV = Vector2.zero;
+            Color32 leftColor = Color.black;
+            Color32 rightColor = Color.black;
 
-            Vector2 rightUV = Vector2.Lerp(down.uv, right.uv, rightWorldRatio);
+            if (RASTER_TYPE == RasterType.Solid)
+            {
+                leftColor = Color32.Lerp(down.color, left.color, leftWorldRatio);
+                rightColor = Color32.Lerp(down.color, right.color, rightWorldRatio);
+            }
+            else
+            {
+                leftUV = Vector2.Lerp(down.uv, left.uv, leftWorldRatio);
+                rightUV = Vector2.Lerp(down.uv, right.uv, rightWorldRatio);
+            }
+
+            float leftIntensity = Mathf.Lerp(down.intensity, left.intensity, leftWorldRatio);
             float rightIntensity = Mathf.Lerp(down.intensity, right.intensity,  rightWorldRatio);
 
             int pixelIndex = i * m_width + iLeftX;
@@ -353,9 +363,19 @@ public class Raster
                 float midRatio2 = (originPos - leftWorldPos).magnitude / horiLen;
 
                 float intensity = Mathf.Lerp(leftIntensity, rightIntensity, midRatio2);
-                Vector2 uv = Vector2.Lerp(leftUV, rightUV, midRatio2);
 
-                color = m_sampler.Sampling(uv.x, uv.y);
+                Vector2 uv;
+
+                if (RASTER_TYPE == RasterType.Solid)
+                {
+                    color = Color32.Lerp(leftColor, rightColor, midRatio2);
+                }
+                else
+                {
+                    uv = Vector2.Lerp(leftUV, rightUV, midRatio2);
+                    color = m_sampler.Sampling(uv.x, uv.y);
+                }
+
                 color.r = (byte)(color.r * intensity);
                 color.g = (byte)(color.g * intensity);
                 color.b = (byte)(color.b * intensity);
@@ -367,7 +387,7 @@ public class Raster
             rightX += rightK;
         }
 
-        color = m_sampler.Sampling(down.uv.x, down.uv.y);
+        color = RASTER_TYPE == RasterType.Solid ? down.color : m_sampler.Sampling(down.uv.x, down.uv.y);
         color.r = (byte)(color.r * down.intensity);
         color.g = (byte)(color.g * down.intensity);
         color.b = (byte)(color.b * down.intensity);
@@ -400,7 +420,7 @@ public class Raster
         midV2.position = m_projector.ScreenToWorld(midV2.x, midV2.y, 1.0f / rd);
 
         float ratio2 = (upV.position - midV2.position).magnitude / (upV.position - downV.position).magnitude;
-        midV2.color = Color32.Lerp(upV.color, downV.color, ratio2);
+        midV2.color = Color.Lerp(upV.color, downV.color, ratio2);
         midV2.uv = Vector2.Lerp(upV.uv, downV.uv, ratio2);
         midV2.intensity = Mathf.Lerp(upV.intensity, downV.intensity, ratio2);
 

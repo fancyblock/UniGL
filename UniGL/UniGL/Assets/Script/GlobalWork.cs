@@ -6,25 +6,20 @@ public class GlobalWork : MonoBehaviour
 {
     public UniGL_Ex m_renderer;
 
-    public Toggle[] m_resolutions;
+    public InputField m_resolution;
+    public Toggle m_projections;
+
     public Toggle[] m_textures;
-    public Toggle[] m_projections;
     public Toggle[] m_renderTypes;
     public Toggle m_light;
 
 
     public void onResolutionChange()
     {
-        foreach( Toggle tog in m_resolutions )
-        {
-            if (tog.isOn)
-            {
-                string resolution = tog.gameObject.name;
-                string[] size = resolution.Split('x');
+        string resolution = m_resolution.text;
+        string[] size = resolution.Split('x');
 
-                m_renderer.SetResolution(int.Parse(size[0]), int.Parse(size[1]));
-            }
-        }
+        m_renderer.SetResolution(int.Parse(size[0]), int.Parse(size[1]));
     }
 
     public void onTexChange()
@@ -50,18 +45,7 @@ public class GlobalWork : MonoBehaviour
 
     public void onProjectChange()
     {
-        foreach( Toggle tog in m_projections )
-        {
-            if( tog.isOn )
-            {
-                string name = tog.gameObject.name;
-
-                if (name == "Orth")
-                    m_renderer.SetOrtho(true);
-                else
-                    m_renderer.SetOrtho(false);
-            }
-        }
+        m_renderer.SetOrtho(!m_projections.isOn);
     }
 
     public void onRenderTypeChange()
@@ -75,17 +59,10 @@ public class GlobalWork : MonoBehaviour
                 m_renderer.SetRenderType(name);
 
                 // [HACK]
-                if (name == "Texture")
+                if (name == "Texture" || name == "Solid")
                 {
                     m_renderer.SetOrtho(false);
-                    
-                    foreach( Toggle pTog in m_projections )
-                    {
-                        if (pTog.gameObject.name == "Orth")
-                            pTog.isOn = false;
-                        else
-                            pTog.isOn = true;
-                    }
+                    m_projections.isOn = true;
                 }
                 //[HACK]
             }
