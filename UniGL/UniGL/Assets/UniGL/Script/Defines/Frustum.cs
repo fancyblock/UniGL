@@ -23,6 +23,9 @@ public class Frustum : IClippingSpace, IProjector
     private float m_sizeHei;
     private float m_sizeWid;
 
+    private float m_halfHei;
+    private float m_halfWid;
+
     private float m_ratio;
 
 
@@ -40,6 +43,9 @@ public class Frustum : IClippingSpace, IProjector
 
         m_sizeHei = size;
         m_sizeWid = (float)m_viewportWid * m_sizeHei / (float)m_viewportHei;
+
+        m_halfHei = m_sizeHei / 2.0f;
+        m_halfWid = m_sizeWid / 2.0f;
 
         m_ratio = (float)m_viewportHei / m_sizeHei;
     }
@@ -64,8 +70,8 @@ public class Frustum : IClippingSpace, IProjector
     /// <param name="y"></param>
 	public void WorldToScreen( Vector4 pos, out int x, out int y )
 	{
-		x = (int)((pos.x * m_d / pos.z + m_sizeWid / 2) * m_ratio);
-		y = (int)((pos.y * m_d / pos.z + m_sizeHei / 2) * m_ratio);
+		x = (int)((pos.x * m_d / pos.z + m_halfHei) * m_ratio);
+		y = (int)((pos.y * m_d / pos.z + m_halfWid) * m_ratio);
 	}
 
     /// <summary>
@@ -77,8 +83,8 @@ public class Frustum : IClippingSpace, IProjector
     /// <returns></returns>
     public Vector3 ScreenToWorld(int x, int y, float worldZ)
     {
-        float worldX = ( (float)x / m_ratio - m_sizeWid / 2.0f ) / ( m_d / worldZ );
-        float worldY = ( (float)y / m_ratio - m_sizeHei / 2.0f ) / ( m_d / worldZ );
+        float worldX = ( (float)x / m_ratio - m_halfHei) / ( m_d / worldZ );
+        float worldY = ( (float)y / m_ratio - m_halfWid) / ( m_d / worldZ );
 
         return new Vector3(worldX, worldY, worldZ);
     }

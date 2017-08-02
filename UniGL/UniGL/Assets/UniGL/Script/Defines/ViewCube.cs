@@ -21,6 +21,9 @@ public class ViewCube : IClippingSpace, IProjector
 	private int m_viewportHei;
 	private float m_ratio;
 
+    private float m_halfHei;
+    private float m_halfWid;
+
 
     /// <summary>
     /// 构造函数
@@ -34,7 +37,10 @@ public class ViewCube : IClippingSpace, IProjector
 		m_sizeHei = size;
 		m_sizeWid = (float)m_viewportWid * m_sizeHei / (float)m_viewportHei;
 
-		m_ratio = (float)m_viewportHei / (float)m_sizeHei;
+        m_halfHei = m_sizeHei / 2.0f;
+        m_halfWid = m_sizeWid / 2.0f;
+
+        m_ratio = (float)m_viewportHei / (float)m_sizeHei;
     }
 
     /// <summary>
@@ -57,8 +63,8 @@ public class ViewCube : IClippingSpace, IProjector
     /// <param name="y"></param>
 	public void WorldToScreen( Vector4 pos, out int x, out int y )
 	{
-		x = (int)( (pos.x + m_sizeWid / 2) * m_ratio );
-		y = (int)( (pos.y + m_sizeHei / 2) * m_ratio );
+		x = (int)( (pos.x + m_halfWid) * m_ratio );
+		y = (int)( (pos.y + m_halfHei) * m_ratio );
 	}
 
     /// <summary>
@@ -70,8 +76,8 @@ public class ViewCube : IClippingSpace, IProjector
     /// <returns></returns>
     public Vector3 ScreenToWorld(int x, int y, float worldZ)
     {
-        float worldX = (float)x / m_ratio - m_sizeWid / 2.0f;
-        float worldY = (float)y / m_ratio - m_sizeHei / 2.0f;
+        float worldX = (float)x / m_ratio - m_halfWid;
+        float worldY = (float)y / m_ratio - m_halfHei;
 
         return new Vector3(worldX, worldY, worldZ);
     }

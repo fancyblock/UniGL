@@ -241,10 +241,15 @@ public class Raster
             Vector2 rightUV = Vector2.Lerp(top.uv, right.uv, rightWorldRatio);
             float rightIntensity = Mathf.Lerp(top.intensity, right.intensity, rightWorldRatio);
 
-            for ( int j = iLeftX; j <= iRightX; j++ )
+            int pixelIndex = i * m_width + iLeftX;
+
+            for ( int j = iLeftX; j <= iRightX; j++, pixelIndex++ )
             {
-                if (j < 0 || j >= m_width)
+                if ( j < 0 )
                     continue;
+
+                if ( j >= m_width )
+                    break;
 
                 Vector2 mid = new Vector2(j, i);
 
@@ -263,7 +268,7 @@ public class Raster
                 color.g = (byte)(color.g * intensity);
                 color.b = (byte)(color.b * intensity);
 
-                drawPixel(j, i, color, originPos.z);
+                drawRawPixel(pixelIndex, color, originPos.z);
             }
         }
     }
@@ -328,10 +333,15 @@ public class Raster
             Vector2 rightUV = Vector2.Lerp(down.uv, right.uv, rightWorldRatio);
             float rightIntensity = Mathf.Lerp(down.intensity, right.intensity,  rightWorldRatio);
 
-            for (int j = iLeftX; j <= iRightX; j++)
+            int pixelIndex = i * m_width + iLeftX;
+
+            for (int j = iLeftX; j <= iRightX; j++, pixelIndex++)
             {
-                if (j < 0 || j >= m_width)
+                if (j < 0)
                     continue;
+
+                if (j >= m_width)
+                    break;
 
                 Vector2 mid = new Vector2(j, i);
 
@@ -350,7 +360,7 @@ public class Raster
                 color.g = (byte)(color.g * intensity);
                 color.b = (byte)(color.b * intensity);
 
-                drawPixel(j, i, color, originPos.z);
+                drawRawPixel(pixelIndex, color, originPos.z);
             }
 
             leftX += leftK;
@@ -495,6 +505,21 @@ public class Raster
             {
                 m_colorBuffer[index] = color;
             }
+        }
+    }
+
+    /// <summary>
+    /// 通过buffer的index来绘制像素
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="color"></param>
+    /// <param name="z"></param>
+    private void drawRawPixel( int index, Color32 color, float z )
+    {
+        if( z < m_depthBuffer[index] )
+        {
+            m_colorBuffer[index] = color;
+            m_depthBuffer[index] = z;
         }
     }
 
